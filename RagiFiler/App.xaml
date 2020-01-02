@@ -1,9 +1,9 @@
-﻿<Application x:Class="RagiFiler.App"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:RagiFiler"
-             StartupUri="MainWindow.xaml">
-    <Application.Resources>
-         
-    </Application.Resources>
-</Application>
+﻿<prism:PrismApplication
+    xmlns:prism="http://prismlibrary.com/"
+    x:Class="RagiFiler.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <prism:PrismApplication.Resources>
+        <!--<ResourceDictionary Source="./Views/Controls/TreeView.xaml" />-->
+    </prism:PrismApplication.Resources>
+</prism:PrismApplication>

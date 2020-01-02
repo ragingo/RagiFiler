@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace RagiFiler
+namespace RagiFiler.Views
 {
     public partial class MainWindow : Window
     {
