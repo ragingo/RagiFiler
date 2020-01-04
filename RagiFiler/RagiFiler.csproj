@@ -10,6 +10,7 @@
     <RepositoryUrl>https://github.com/ragingo/RagiFiler</RepositoryUrl>
     <PackageProjectUrl>https://github.com/ragingo/RagiFiler</PackageProjectUrl>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
