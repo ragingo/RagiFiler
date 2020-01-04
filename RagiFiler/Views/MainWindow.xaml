@@ -8,6 +8,8 @@
         xmlns:vc="clr-namespace:RagiFiler.Views.Controls"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         prism:ViewModelLocator.AutoWireViewModel="True"
+        xmlns:settings="clr-namespace:RagiFiler.Settings"
+        xmlns:vm="clr-namespace:RagiFiler.ViewModels"
         Title="RagiFiler" Height="600" Width="800">
 
     <i:Interaction.Triggers>
@@ -28,14 +30,32 @@
             <TabControl.ContentTemplate>
                 <DataTemplate>
                     <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="300" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <Grid Grid.Column="0">
+                        <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+                            <Ribbon ShowQuickAccessToolBarOnTop="False">
+                                <Ribbon.ApplicationMenu>
+                                    <RibbonApplicationMenu>
+                                        <RibbonApplicationMenuItem Header="終了" />
+                                    </RibbonApplicationMenu>
+                                </Ribbon.ApplicationMenu>
+                                <RibbonTab Header="表示">
+                                    <RibbonGroup Header="表示 / 非表示">
+                                        <RibbonCheckBox Label="隠しファイル" IsChecked="{Binding RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}, Path=DataContext.ShowHiddenFiles.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    </RibbonGroup>
+                                </RibbonTab>
+                            </Ribbon>
+                        </Grid>
+                        <Grid Grid.Row="1" Grid.Column="0">
                             <vc:TreeView DataContext="{Binding Path=Tree.Root}" />
                         </Grid>
-                        <Grid Grid.Column="1">
+                        <Grid Grid.Row="1" Grid.Column="1">
                             <ListView ItemsSource="{Binding Path=Tree.Root.Children}">
                                 <ListView.ItemTemplate>
                                     <DataTemplate>

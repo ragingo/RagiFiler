@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
@@ -9,11 +10,13 @@ namespace RagiFiler.Media
 {
     static class ImageUtils
     {
+        private static readonly Dictionary<long, BitmapSource> _fileIconCache = new Dictionary<long, BitmapSource>();
+
         public static BitmapSource GetFileIcon(string path)
         {
             var shinfo = new SHFILEINFO();
             var result =
-                Functions.SHGetFileInfo(
+                NativeMethods.SHGetFileInfo(
                     path, 0, ref shinfo,
                     (uint)Marshal.SizeOf(shinfo),
                     Constants.SHGFI_ICON | Constants.SHGFI_SMALLICON | Constants.SHGFI_LARGEICON
@@ -29,10 +32,17 @@ namespace RagiFiler.Media
                 return null;
             }
 
-            var bs = Imaging.CreateBitmapSourceFromHIcon(shinfo.hIcon, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+            long key = shinfo.iIcon.ToInt64();
+
+            if (_fileIconCache.TryGetValue(key, out var bs))
+            {
+                return bs;
+            }
+
+            bs = Imaging.CreateBitmapSourceFromHIcon(shinfo.hIcon, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
             bs.Freeze();
 
-            Functions.DestroyIcon(shinfo.hIcon);
+            NativeMethods.DestroyIcon(shinfo.hIcon);
 
             return bs;
         }

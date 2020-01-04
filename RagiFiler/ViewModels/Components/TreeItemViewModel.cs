@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using Prism.Mvvm;
@@ -13,14 +13,11 @@ namespace RagiFiler.ViewModels.Components
 {
     class TreeItemViewModel : BindableBase
     {
-        private static readonly Dictionary<string, ImageSource> _iconCache = new Dictionary<string, ImageSource>();
-
         public WeakReference<TreeItemViewModel> Parent { get; set; }
         public ObservableCollection<TreeItemViewModel> Children { get; } = new ObservableCollection<TreeItemViewModel>();
         public FileSystemInfo Item { get; set; }
         public bool IsDirectory { get { return Item is DirectoryInfo; } }
-
-        public ReactiveCommand<TreeItemViewModel> SelectedItemChanged { get; } = new ReactiveCommand<TreeItemViewModel>();
+        public ReactiveCommand<object> SelectedItemChanged { get; } = new ReactiveCommand<object>();
 
         private ImageSource _icon;
         public ImageSource Icon
@@ -29,15 +26,27 @@ namespace RagiFiler.ViewModels.Components
             {
                 if (_icon == null && Item != null)
                 {
-                    var img = ImageUtils.GetFileIcon(Item.FullName);
-                    if (!_iconCache.ContainsKey(Item.FullName))
-                    {
-                        _iconCache[Item.FullName] = img;
-                    }
-                    _icon = _iconCache[Item.FullName];
-                    RaisePropertyChanged(nameof(Icon));
+                    SetProperty(ref _icon, ImageUtils.GetFileIcon(Item.FullName), nameof(Icon));
                 }
                 return _icon;
+            }
+        }
+
+        public int Level
+        {
+            get
+            {
+                if (Parent == null)
+                {
+                    return 0;
+                }
+
+                if (Parent.TryGetTarget(out var item))
+                {
+                    return item.Level + 1;
+                }
+
+                return 0;
             }
         }
 
@@ -58,21 +67,37 @@ namespace RagiFiler.ViewModels.Components
 
         public async Task LoadSubDirectories()
         {
-            await foreach (var dir in IOUtils.LoadDirectoriesAsync(Item.FullName))
+            if (Children.Count > 0)
             {
-                var item = new TreeItemViewModel(dir) { Parent = new WeakReference<TreeItemViewModel>(this) };
+                return;
+            }
+
+            await foreach (var info in IOUtils.LoadFileSystemInfosAsync(Item.FullName).OfType<DirectoryInfo>())
+            {
+                var item = new TreeItemViewModel(info) { Parent = new WeakReference<TreeItemViewModel>(this) };
                 Children.Add(item);
             }
         }
 
-        private async void OnSelectedItemChanged(TreeItemViewModel item)
+        private async void OnSelectedItemChanged(object value)
         {
+            if (!(value is TreeItemViewModel item))
+            {
+                return;
+            }
+
             if (!item.IsDirectory)
             {
                 return;
             }
 
-            await item.LoadSubDirectories().ConfigureAwait(true);
+            try
+            {
+                await item.LoadSubDirectories().ConfigureAwait(true);
+            }
+            catch (UnauthorizedAccessException)
+            {
+            }
         }
     }
 }

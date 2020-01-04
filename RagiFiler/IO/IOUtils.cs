@@ -6,16 +6,16 @@ namespace RagiFiler.IO
 {
     static class IOUtils
     {
-        public static IEnumerable<FileSystemInfo> LoadDirectories(string path)
+        public static IEnumerable<FileSystemInfo> LoadFileSystemInfos(string path)
         {
             var fsi = new DirectoryInfo(path);
             var entries = fsi.EnumerateFileSystemInfos("*", SearchOption.TopDirectoryOnly);
             return entries;
         }
 
-        public static IAsyncEnumerable<FileSystemInfo> LoadDirectoriesAsync(string path)
+        public static IAsyncEnumerable<FileSystemInfo> LoadFileSystemInfosAsync(string path)
         {
-            return LoadDirectories(path).ToAsyncEnumerable();
+            return LoadFileSystemInfos(path).ToAsyncEnumerable();
         }
 
         public static IAsyncEnumerable<DriveInfo> LoadDrivesAsync()
