@@ -24,7 +24,7 @@ namespace RagiFiler.ViewModels.Components
         {
             get
             {
-                if (_icon == null && Item != null)
+                if (_icon == null)
                 {
                     SetProperty(ref _icon, ImageUtils.GetFileIcon(Item.FullName), nameof(Icon));
                 }
@@ -50,7 +50,7 @@ namespace RagiFiler.ViewModels.Components
             }
         }
 
-        TreeItemViewModel()
+        private TreeItemViewModel()
         {
             SelectedItemChanged.Subscribe(OnSelectedItemChanged);
         }

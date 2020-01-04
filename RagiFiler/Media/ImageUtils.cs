@@ -34,13 +34,12 @@ namespace RagiFiler.Media
 
             long key = shinfo.iIcon.ToInt64();
 
-            if (_fileIconCache.TryGetValue(key, out var bs))
+            if (!_fileIconCache.TryGetValue(key, out var bs))
             {
-                return bs;
+                bs = Imaging.CreateBitmapSourceFromHIcon(shinfo.hIcon, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+                bs.Freeze();
+                _fileIconCache.Add(key, bs);
             }
-
-            bs = Imaging.CreateBitmapSourceFromHIcon(shinfo.hIcon, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-            bs.Freeze();
 
             NativeMethods.DestroyIcon(shinfo.hIcon);
 
