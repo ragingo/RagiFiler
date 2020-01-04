@@ -17,6 +17,8 @@ namespace RagiFiler.ViewModels.Components
         public ObservableCollection<TreeItemViewModel> Children { get; } = new ObservableCollection<TreeItemViewModel>();
         public FileSystemInfo Item { get; set; }
         public bool IsDirectory { get { return Item is DirectoryInfo; } }
+        public bool IsHiddenFile { get { return (Item.Attributes & FileAttributes.Hidden) > 0; } }
+        public bool IsSystemFile { get { return (Item.Attributes & FileAttributes.System) > 0; } }
         public ReactiveCommand<object> SelectedItemChanged { get; } = new ReactiveCommand<object>();
 
         private ImageSource _icon;

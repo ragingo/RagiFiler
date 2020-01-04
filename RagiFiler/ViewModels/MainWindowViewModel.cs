@@ -11,6 +11,7 @@ namespace RagiFiler.ViewModels
     class MainWindowViewModel : BindableBase
     {
         public ReactiveProperty<bool> ShowHiddenFiles { get; } = new ReactiveProperty<bool>(FilerSettings.Default.ShowHiddenFiles);
+        public ReactiveProperty<bool> ShowSystemFiles { get; } = new ReactiveProperty<bool>(FilerSettings.Default.ShowSystemFiles);
 
         public ObservableCollection<TabItemViewModel> TabItems { get; } = new ObservableCollection<TabItemViewModel>();
 
@@ -21,6 +22,7 @@ namespace RagiFiler.ViewModels
             LoadedCommand.Subscribe(OnLoaded);
 
             ShowHiddenFiles.Subscribe(OnShowHiddenFilesCheckChanged);
+            ShowSystemFiles.Subscribe(OnShowSystemFilesCheckChanged);
         }
 
         private async void OnLoaded()
@@ -36,6 +38,12 @@ namespace RagiFiler.ViewModels
         private void OnShowHiddenFilesCheckChanged(bool value)
         {
             FilerSettings.Default.ShowHiddenFiles = value;
+            FilerSettings.Default.Save();
+        }
+
+        private void OnShowSystemFilesCheckChanged(bool value)
+        {
+            FilerSettings.Default.ShowSystemFiles = value;
             FilerSettings.Default.Save();
         }
     }

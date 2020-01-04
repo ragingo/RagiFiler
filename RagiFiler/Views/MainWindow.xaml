@@ -48,6 +48,7 @@
                                 <RibbonTab Header="表示">
                                     <RibbonGroup Header="表示 / 非表示">
                                         <RibbonCheckBox Label="隠しファイル" IsChecked="{Binding RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}, Path=DataContext.ShowHiddenFiles.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                        <RibbonCheckBox Label="システムァイル" IsChecked="{Binding RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}, Path=DataContext.ShowSystemFiles.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                     </RibbonGroup>
                                 </RibbonTab>
                             </Ribbon>

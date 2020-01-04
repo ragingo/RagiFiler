@@ -25,13 +25,25 @@ namespace RagiFiler.Settings {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool ShowHiddenFiles {
             get {
                 return ((bool)(this["ShowHiddenFiles"]));
             }
             set {
                 this["ShowHiddenFiles"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ShowSystemFiles {
+            get {
+                return ((bool)(this["ShowSystemFiles"]));
+            }
+            set {
+                this["ShowSystemFiles"] = value;
             }
         }
     }
