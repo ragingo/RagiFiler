@@ -7,7 +7,6 @@ using System.Windows.Media;
 using Prism.Mvvm;
 using RagiFiler.IO;
 using RagiFiler.Media;
-using Reactive.Bindings;
 
 namespace RagiFiler.ViewModels.Components
 {
@@ -19,7 +18,6 @@ namespace RagiFiler.ViewModels.Components
         public bool IsDirectory { get { return Item is DirectoryInfo; } }
         public bool IsHiddenFile { get { return (Item.Attributes & FileAttributes.Hidden) > 0; } }
         public bool IsSystemFile { get { return (Item.Attributes & FileAttributes.System) > 0; } }
-        public ReactiveCommand<object> SelectedItemChanged { get; } = new ReactiveCommand<object>();
 
         private ImageSource _icon;
         public ImageSource Icon
@@ -52,17 +50,12 @@ namespace RagiFiler.ViewModels.Components
             }
         }
 
-        private TreeItemViewModel()
-        {
-            SelectedItemChanged.Subscribe(OnSelectedItemChanged);
-        }
-
-        public TreeItemViewModel(string path) : this()
+        public TreeItemViewModel(string path)
         {
             Item = new DirectoryInfo(path);
         }
 
-        public TreeItemViewModel(FileSystemInfo info) : this()
+        public TreeItemViewModel(FileSystemInfo info)
         {
             Item = info;
         }
@@ -78,27 +71,6 @@ namespace RagiFiler.ViewModels.Components
             {
                 var item = new TreeItemViewModel(info) { Parent = new WeakReference<TreeItemViewModel>(this) };
                 Children.Add(item);
-            }
-        }
-
-        private async void OnSelectedItemChanged(object value)
-        {
-            if (!(value is TreeItemViewModel item))
-            {
-                return;
-            }
-
-            if (!item.IsDirectory)
-            {
-                return;
-            }
-
-            try
-            {
-                await item.LoadSubDirectories().ConfigureAwait(true);
-            }
-            catch (UnauthorizedAccessException)
-            {
             }
         }
     }

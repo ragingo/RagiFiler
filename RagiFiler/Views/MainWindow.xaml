@@ -54,13 +54,16 @@
                             </Ribbon>
                         </Grid>
                         <Grid Grid.Row="1" Grid.Column="0">
-                            <vc:TreeView DataContext="{Binding Path=Tree.Root}" />
+                            <vc:TreeView DataContext="{Binding Path=Tree}" />
                         </Grid>
                         <Grid Grid.Row="1" Grid.Column="1">
-                            <ListView ItemsSource="{Binding Path=Tree.Root.Children}">
+                            <ListView ItemsSource="{Binding Path=List.Entries}">
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Path=Item.Name}" />
+                                        <StackPanel x:Name="panel" Orientation="Horizontal">
+                                            <Image x:Name="icon" Source="{Binding Path=Icon}" Width="16" Height="16" Margin="3,0,3,0" />
+                                            <TextBlock x:Name="name" Text="{Binding Path=Item.Name}" />
+                                        </StackPanel>
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
                             </ListView>
