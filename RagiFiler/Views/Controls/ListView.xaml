@@ -3,6 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+             xmlns:settings="clr-namespace:RagiFiler.Settings"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -14,6 +17,9 @@
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel x:Name="panel" Orientation="Horizontal">
+                                        <StackPanel.InputBindings>
+                                            <MouseBinding Gesture="LeftDoubleClick" Command="{Binding Path=DataContext.MouseDoubleClick, RelativeSource={RelativeSource AncestorType=ListView, Mode=FindAncestor}}" CommandParameter="{Binding Path=.}" />
+                                        </StackPanel.InputBindings>
                                         <Image x:Name="icon" Source="{Binding Path=Icon}" Width="16" Height="16" Margin="3,0,3,0" />
                                         <TextBlock x:Name="name" Text="{Binding Path=Item.Name}" />
                                     </StackPanel>
@@ -31,6 +37,30 @@
                     </GridView.Columns>
                 </GridView>
             </ListView.View>
+            <ListView.ItemContainerStyle>
+                <Style>
+                    <Style.Triggers>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=IsHiddenFile}" Value="True" />
+                                <Condition Binding="{Binding Path=ShowHiddenFiles, Source={x:Static settings:FilerSettings.Default}}" Value="False" />
+                            </MultiDataTrigger.Conditions>
+                            <MultiDataTrigger.Setters>
+                                <Setter Property="TreeViewItem.Visibility" Value="Collapsed" />
+                            </MultiDataTrigger.Setters>
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=IsSystemFile}" Value="True" />
+                                <Condition Binding="{Binding Path=ShowHiddenFiles, Source={x:Static settings:FilerSettings.Default}}" Value="False" />
+                            </MultiDataTrigger.Conditions>
+                            <MultiDataTrigger.Setters>
+                                <Setter Property="TreeViewItem.Visibility" Value="Collapsed" />
+                            </MultiDataTrigger.Setters>
+                        </MultiDataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ListView.ItemContainerStyle>
         </ListView>
     </Grid>
 </UserControl>
