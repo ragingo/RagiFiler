@@ -3,18 +3,21 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:vc="clr-namespace:RagiFiler.Views.Controls"
         mc:Ignorable="d"
         xmlns:prism="http://prismlibrary.com/"
-        xmlns:vc="clr-namespace:RagiFiler.Views.Controls"
-        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         prism:ViewModelLocator.AutoWireViewModel="True"
-        xmlns:settings="clr-namespace:RagiFiler.Settings"
-        xmlns:vm="clr-namespace:RagiFiler.ViewModels"
-        Title="RagiFiler" Height="600" Width="800">
+        Width="{Binding Path=Width.Value, Mode=TwoWay}"
+        Height="{Binding Path=Height.Value, Mode=TwoWay}"
+        Title="RagiFiler">
 
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
-            <i:InvokeCommandAction Command="{Binding LoadedCommand}" />
+            <i:InvokeCommandAction Command="{Binding Path=WindowLoadedCommand}" />
+        </i:EventTrigger>
+        <i:EventTrigger EventName="Closing">
+            <i:InvokeCommandAction Command="{Binding Path=WindowClosingCommand}" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
 
@@ -57,16 +60,7 @@
                             <vc:TreeView DataContext="{Binding Path=Tree}" />
                         </Grid>
                         <Grid Grid.Row="1" Grid.Column="1">
-                            <ListView ItemsSource="{Binding Path=List.Entries}">
-                                <ListView.ItemTemplate>
-                                    <DataTemplate>
-                                        <StackPanel x:Name="panel" Orientation="Horizontal">
-                                            <Image x:Name="icon" Source="{Binding Path=Icon}" Width="16" Height="16" Margin="3,0,3,0" />
-                                            <TextBlock x:Name="name" Text="{Binding Path=Item.Name}" />
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </ListView.ItemTemplate>
-                            </ListView>
+                            <vc:ListView DataContext="{Binding Path=List}" />
                         </Grid>
                     </Grid>
                 </DataTemplate>

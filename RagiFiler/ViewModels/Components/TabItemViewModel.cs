@@ -15,14 +15,14 @@ namespace RagiFiler.ViewModels.Components
 
         public TabItemViewModel()
         {
+            Tree.SelectedItemChanged.Subscribe(OnSelectedItemChanged);
         }
 
         public async Task Load(string drive)
         {
+            Title.Value = drive;
             Tree.Root = new TreeItemViewModel(drive);
             await Tree.Root.LoadSubDirectories().ConfigureAwait(true);
-
-            Tree.SelectedItemChanged.Subscribe(OnSelectedItemChanged);
         }
 
         private void OnSelectedItemChanged(object value)

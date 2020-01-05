@@ -12,6 +12,14 @@ namespace RagiFiler.ViewModels.Components
         public bool IsHiddenFile { get { return (Item.Attributes & FileAttributes.Hidden) > 0; } }
         public bool IsSystemFile { get { return (Item.Attributes & FileAttributes.System) > 0; } }
 
+        public long? FileSize
+        {
+            get
+            {
+                return (Item as FileInfo)?.Length;
+            }
+        }
+
         private ImageSource _icon;
         public ImageSource Icon
         {
