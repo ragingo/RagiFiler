@@ -5,7 +5,7 @@ using RagiFiler.Media;
 
 namespace RagiFiler.ViewModels.Components
 {
-    class ListItemViewModel : BindableBase
+    class FileListViewItemViewModel : BindableBase
     {
         public FileSystemInfo Item { get; private set; }
         public bool IsDirectory { get { return Item is DirectoryInfo; } }
@@ -33,7 +33,7 @@ namespace RagiFiler.ViewModels.Components
             }
         }
 
-        public ListItemViewModel(FileSystemInfo info)
+        public FileListViewItemViewModel(FileSystemInfo info)
         {
             Item = info;
         }

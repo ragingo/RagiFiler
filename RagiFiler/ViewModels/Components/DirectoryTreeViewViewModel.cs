@@ -4,22 +4,22 @@ using Reactive.Bindings;
 
 namespace RagiFiler.ViewModels.Components
 {
-    class TreeViewModel : BindableBase
+    class DirectoryTreeViewViewModel : BindableBase
     {
-        public TreeItemViewModel Root { get; set; }
+        public DirectoryTreeViewItemViewModel Root { get; set; }
 
-        public ReactiveProperty<TreeItemViewModel> SelectedItem { get; } = new ReactiveProperty<TreeItemViewModel>();
+        public ReactiveProperty<DirectoryTreeViewItemViewModel> SelectedItem { get; } = new ReactiveProperty<DirectoryTreeViewItemViewModel>();
 
         public ReactiveCommand<object> SelectedItemChanged { get; } = new ReactiveCommand<object>();
 
-        public TreeViewModel()
+        public DirectoryTreeViewViewModel()
         {
             SelectedItemChanged.Subscribe(OnSelectedItemChanged);
         }
 
         private async void OnSelectedItemChanged(object value)
         {
-            if (!(value is TreeItemViewModel item))
+            if (!(value is DirectoryTreeViewItemViewModel item))
             {
                 return;
             }

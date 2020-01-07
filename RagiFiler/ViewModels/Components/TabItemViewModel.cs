@@ -9,30 +9,30 @@ namespace RagiFiler.ViewModels.Components
     {
         public ReactiveProperty<string> Title { get; } = new ReactiveProperty<string>();
 
-        public TreeViewModel Tree { get; } = new TreeViewModel();
+        public DirectoryTreeViewViewModel DirectoryTree { get; } = new DirectoryTreeViewViewModel();
 
-        public ListViewModel List { get; } = new ListViewModel();
+        public FileListViewViewModel FileList { get; } = new FileListViewViewModel();
 
         public TabItemViewModel()
         {
-            Tree.SelectedItemChanged.Subscribe(OnSelectedItemChanged);
+            DirectoryTree.SelectedItemChanged.Subscribe(OnSelectedItemChanged);
         }
 
         public async Task Load(string drive)
         {
             Title.Value = drive;
-            Tree.Root = new TreeItemViewModel(drive);
-            await Tree.Root.LoadSubDirectories().ConfigureAwait(true);
+            DirectoryTree.Root = new DirectoryTreeViewItemViewModel(drive);
+            await DirectoryTree.Root.LoadSubDirectories().ConfigureAwait(true);
         }
 
         private void OnSelectedItemChanged(object value)
         {
-            if (!(value is TreeItemViewModel item))
+            if (!(value is DirectoryTreeViewItemViewModel item))
             {
                 return;
             }
 
-            List.Directory.Value = item.Item.FullName;
+            FileList.Directory.Value = item.Item.FullName;
         }
     }
 

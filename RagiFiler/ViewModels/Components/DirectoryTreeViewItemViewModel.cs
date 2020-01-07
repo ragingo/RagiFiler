@@ -10,10 +10,10 @@ using RagiFiler.Media;
 
 namespace RagiFiler.ViewModels.Components
 {
-    class TreeItemViewModel : BindableBase
+    class DirectoryTreeViewItemViewModel : BindableBase
     {
-        public WeakReference<TreeItemViewModel> Parent { get; set; }
-        public ObservableCollection<TreeItemViewModel> Children { get; } = new ObservableCollection<TreeItemViewModel>();
+        public WeakReference<DirectoryTreeViewItemViewModel> Parent { get; set; }
+        public ObservableCollection<DirectoryTreeViewItemViewModel> Children { get; } = new ObservableCollection<DirectoryTreeViewItemViewModel>();
         public FileSystemInfo Item { get; set; }
         public bool IsDirectory { get { return Item is DirectoryInfo; } }
         public bool IsHiddenFile { get { return (Item.Attributes & FileAttributes.Hidden) > 0; } }
@@ -50,12 +50,12 @@ namespace RagiFiler.ViewModels.Components
             }
         }
 
-        public TreeItemViewModel(string path)
+        public DirectoryTreeViewItemViewModel(string path)
         {
             Item = new DirectoryInfo(path);
         }
 
-        public TreeItemViewModel(FileSystemInfo info)
+        public DirectoryTreeViewItemViewModel(FileSystemInfo info)
         {
             Item = info;
         }
@@ -69,7 +69,7 @@ namespace RagiFiler.ViewModels.Components
 
             await foreach (var info in IOUtils.LoadFileSystemInfosAsync(Item.FullName).OfType<DirectoryInfo>())
             {
-                var item = new TreeItemViewModel(info) { Parent = new WeakReference<TreeItemViewModel>(this) };
+                var item = new DirectoryTreeViewItemViewModel(info) { Parent = new WeakReference<DirectoryTreeViewItemViewModel>(this) };
                 Children.Add(item);
             }
         }

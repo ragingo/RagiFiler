@@ -12,7 +12,7 @@
 
     <UserControl.Resources>
         <ResourceDictionary>
-            <HierarchicalDataTemplate DataType="{x:Type vm_components:TreeItemViewModel}" ItemsSource="{Binding Path=Children}">
+            <HierarchicalDataTemplate DataType="{x:Type vm_components:DirectoryTreeViewItemViewModel}" ItemsSource="{Binding Path=Children}">
                 <StackPanel x:Name="panel" Orientation="Horizontal">
                     <Image x:Name="icon" Source="{Binding Path=Icon}" Width="16" Height="16" Margin="3,0,3,0" />
                     <TextBlock x:Name="name" Text="{Binding Path=Item.Name}" />

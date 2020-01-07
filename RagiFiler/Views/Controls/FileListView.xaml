@@ -3,8 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:prism="http://prismlibrary.com/"
-             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              xmlns:settings="clr-namespace:RagiFiler.Settings"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
@@ -46,7 +44,7 @@
                                 <Condition Binding="{Binding Path=ShowHiddenFiles, Source={x:Static settings:FilerSettings.Default}}" Value="False" />
                             </MultiDataTrigger.Conditions>
                             <MultiDataTrigger.Setters>
-                                <Setter Property="TreeViewItem.Visibility" Value="Collapsed" />
+                                <Setter Property="ListViewItem.Visibility" Value="Collapsed" />
                             </MultiDataTrigger.Setters>
                         </MultiDataTrigger>
                         <MultiDataTrigger>
@@ -55,7 +53,7 @@
                                 <Condition Binding="{Binding Path=ShowHiddenFiles, Source={x:Static settings:FilerSettings.Default}}" Value="False" />
                             </MultiDataTrigger.Conditions>
                             <MultiDataTrigger.Setters>
-                                <Setter Property="TreeViewItem.Visibility" Value="Collapsed" />
+                                <Setter Property="ListViewItem.Visibility" Value="Collapsed" />
                             </MultiDataTrigger.Setters>
                         </MultiDataTrigger>
                     </Style.Triggers>

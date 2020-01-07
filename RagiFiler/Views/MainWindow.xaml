@@ -57,10 +57,10 @@
                             </Ribbon>
                         </Grid>
                         <Grid Grid.Row="1" Grid.Column="0">
-                            <vc:TreeView DataContext="{Binding Path=Tree}" />
+                            <vc:TreeView DataContext="{Binding Path=DirectoryTree}" />
                         </Grid>
                         <Grid Grid.Row="1" Grid.Column="1">
-                            <vc:ListView DataContext="{Binding Path=List}" />
+                            <vc:ListView DataContext="{Binding Path=FileList}" />
                         </Grid>
                     </Grid>
                 </DataTemplate>

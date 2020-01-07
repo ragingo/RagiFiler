@@ -7,15 +7,15 @@ using Reactive.Bindings;
 
 namespace RagiFiler.ViewModels.Components
 {
-    class ListViewModel
+    class FileListViewViewModel
     {
         public ReactiveProperty<string> Directory { get; } = new ReactiveProperty<string>();
 
-        public ObservableCollection<ListItemViewModel> Entries { get; } = new ObservableCollection<ListItemViewModel>();
+        public ObservableCollection<FileListViewItemViewModel> Entries { get; } = new ObservableCollection<FileListViewItemViewModel>();
 
         public ReactiveCommand<object> MouseDoubleClick { get; } = new ReactiveCommand<object>();
 
-        public ListViewModel()
+        public FileListViewViewModel()
         {
             Directory.Subscribe(OnDirectoryChanged);
             MouseDoubleClick.Subscribe(OnMouseDoubleClick);
@@ -28,7 +28,7 @@ namespace RagiFiler.ViewModels.Components
                 return;
             }
 
-            if (!(value is ListItemViewModel item))
+            if (!(value is FileListViewItemViewModel item))
             {
                 return;
             }
@@ -58,7 +58,7 @@ namespace RagiFiler.ViewModels.Components
             {
                 await foreach (var entry in IOUtils.LoadFileSystemInfosAsync(value))
                 {
-                    Entries.Add(new ListItemViewModel(entry));
+                    Entries.Add(new FileListViewItemViewModel(entry));
                 }
             }
             catch (UnauthorizedAccessException)
