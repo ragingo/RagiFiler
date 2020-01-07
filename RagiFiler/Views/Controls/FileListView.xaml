@@ -4,31 +4,58 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:settings="clr-namespace:RagiFiler.Settings"
+             xmlns:sys="clr-namespace:System;assembly=System.Runtime"
+             xmlns:templates="clr-namespace:RagiFiler.Views.Templates"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.Resources>
+
+        <DataTemplate x:Key="DefaultFileTemplate">
+            <StackPanel x:Name="panel" Orientation="Horizontal">
+                <StackPanel.InputBindings>
+                    <MouseBinding Gesture="LeftDoubleClick" Command="{Binding Path=DataContext.MouseDoubleClick, RelativeSource={RelativeSource AncestorType=ListView, Mode=FindAncestor}}" CommandParameter="{Binding Path=.}" />
+                </StackPanel.InputBindings>
+                <Image x:Name="icon" Source="{Binding Path=Icon}" Width="16" Height="16" Margin="3,0,3,0" />
+                <TextBlock x:Name="name" Text="{Binding Path=Item.Name}" />
+            </StackPanel>
+            <DataTemplate.Triggers>
+                <DataTrigger Binding="{Binding Path=IsSystemFile}" Value="True">
+                    <Setter Property="ListViewItem.Foreground" Value="Red" />
+                </DataTrigger>
+            </DataTemplate.Triggers>
+        </DataTemplate>
+
+        <DataTemplate x:Key="VideoFileTemplate">
+            <StackPanel x:Name="panel" Orientation="Horizontal" ToolTipService.ShowDuration="{x:Static sys:Int32.MaxValue}">
+                <StackPanel.InputBindings>
+                    <MouseBinding Gesture="LeftDoubleClick" Command="{Binding Path=DataContext.MouseDoubleClick, RelativeSource={RelativeSource AncestorType=ListView, Mode=FindAncestor}}" CommandParameter="{Binding Path=.}" />
+                </StackPanel.InputBindings>
+                <Image x:Name="icon" Source="{Binding Path=Icon}" Width="16" Height="16" Margin="3,0,3,0" />
+                <TextBlock x:Name="name" Text="{Binding Path=Item.Name}" />
+                <StackPanel.ToolTip>
+                    <ToolTip>
+                        <MediaElement Width="Auto" Height="Auto" MaxWidth="800" MaxHeight="600" LoadedBehavior="Play" Source="{Binding Path=Item.FullName}" />
+                    </ToolTip>
+                </StackPanel.ToolTip>
+            </StackPanel>
+            <DataTemplate.Triggers>
+                <DataTrigger Binding="{Binding Path=IsSystemFile}" Value="True">
+                    <Setter Property="ListViewItem.Foreground" Value="Red" />
+                </DataTrigger>
+            </DataTemplate.Triggers>
+        </DataTemplate>
+
+        <templates:FilePreviewDataTemplateSelector x:Key="FilePreviewDataTemplateSelector" />
+
+    </UserControl.Resources>
+
     <Grid>
         <ListView ItemsSource="{Binding Path=Entries}">
             <ListView.View>
                 <GridView>
                     <GridView.Columns>
-                        <GridViewColumn Header="名前">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <StackPanel x:Name="panel" Orientation="Horizontal">
-                                        <StackPanel.InputBindings>
-                                            <MouseBinding Gesture="LeftDoubleClick" Command="{Binding Path=DataContext.MouseDoubleClick, RelativeSource={RelativeSource AncestorType=ListView, Mode=FindAncestor}}" CommandParameter="{Binding Path=.}" />
-                                        </StackPanel.InputBindings>
-                                        <Image x:Name="icon" Source="{Binding Path=Icon}" Width="16" Height="16" Margin="3,0,3,0" />
-                                        <TextBlock x:Name="name" Text="{Binding Path=Item.Name}" />
-                                    </StackPanel>
-                                    <DataTemplate.Triggers>
-                                        <DataTrigger Binding="{Binding Path=IsSystemFile}" Value="True">
-                                            <Setter Property="ListViewItem.Foreground" Value="Red" />
-                                        </DataTrigger>
-                                    </DataTemplate.Triggers>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
+                        <GridViewColumn Header="名前" CellTemplateSelector="{StaticResource ResourceKey=FilePreviewDataTemplateSelector}" />
                         <GridViewColumn Header="作成日時" DisplayMemberBinding="{Binding Path=Item.CreationTime, StringFormat=yyyy/MM/dd\ HH:mm:ss.fff}" />
                         <GridViewColumn Header="更新日時" DisplayMemberBinding="{Binding Path=Item.LastWriteTime, StringFormat=yyyy/MM/dd\ HH:mm:ss.fff}" />
                         <GridViewColumn Header="サイズ (Byte)" DisplayMemberBinding="{Binding Path=FileSize, StringFormat=#\,#}" />
