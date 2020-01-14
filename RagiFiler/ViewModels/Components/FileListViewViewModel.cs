@@ -10,15 +10,33 @@ namespace RagiFiler.ViewModels.Components
     class FileListViewViewModel
     {
         public ReactiveProperty<string> Directory { get; } = new ReactiveProperty<string>();
+        public ReactiveProperty<FileListViewItemViewModel> SelectedItem { get; } = new ReactiveProperty<FileListViewItemViewModel>();
 
         public ObservableCollection<FileListViewItemViewModel> Entries { get; } = new ObservableCollection<FileListViewItemViewModel>();
 
+        public ReactiveCommand<object> MouseClick { get; } = new ReactiveCommand<object>();
         public ReactiveCommand<object> MouseDoubleClick { get; } = new ReactiveCommand<object>();
 
         public FileListViewViewModel()
         {
             Directory.Subscribe(OnDirectoryChanged);
+            MouseClick.Subscribe(OnMouseClick);
             MouseDoubleClick.Subscribe(OnMouseDoubleClick);
+        }
+
+        private void OnMouseClick(object value)
+        {
+            if (value == null)
+            {
+                return;
+            }
+
+            if (!(value is FileListViewItemViewModel item))
+            {
+                return;
+            }
+
+            SelectedItem.Value = item;
         }
 
         private void OnMouseDoubleClick(object value)

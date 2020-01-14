@@ -6,6 +6,8 @@
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:vc="clr-namespace:RagiFiler.Views.Controls"
         mc:Ignorable="d"
+        d:DesignWidth="800"
+        d:DesignHeight="600"
         xmlns:prism="http://prismlibrary.com/"
         prism:ViewModelLocator.AutoWireViewModel="True"
         Width="{Binding Path=Width.Value, Mode=TwoWay}"
@@ -39,9 +41,10 @@
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="300" />
+                            <ColumnDefinition Width="300" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+                        <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">
                             <Ribbon ShowQuickAccessToolBarOnTop="False">
                                 <Ribbon.ApplicationMenu>
                                     <RibbonApplicationMenu>
@@ -59,8 +62,13 @@
                         <Grid Grid.Row="1" Grid.Column="0">
                             <vc:TreeView DataContext="{Binding Path=DirectoryTree}" />
                         </Grid>
+                        <GridSplitter Grid.Row="1" Grid.Column="0" Width="2" />
                         <Grid Grid.Row="1" Grid.Column="1">
                             <vc:ListView DataContext="{Binding Path=FileList}" />
+                        </Grid>
+                        <GridSplitter Grid.Row="1" Grid.Column="1" Width="2" />
+                        <Grid Grid.Row="1" Grid.Column="2">
+                            <vc:FilePreview DataContext="{Binding Path=FileList.SelectedItem.Value}" Width="Auto" />
                         </Grid>
                     </Grid>
                 </DataTemplate>
