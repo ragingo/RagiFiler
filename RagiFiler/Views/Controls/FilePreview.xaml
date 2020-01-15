@@ -4,13 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:templates="clr-namespace:RagiFiler.Views.Templates"
-             xmlns:local="clr-namespace:RagiFiler.Views.Controls"
+             xmlns:conv="clr-namespace:RagiFiler.Views.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
     <UserControl.Resources>
 
-        <local:DurationToStringConverter x:Key="DurationToStringConverter" />
+        <conv:SecondsToStringConverter x:Key="SecondsToStringConverter" />
 
         <DataTemplate x:Key="DefaultFileTemplate">
             <StackPanel x:Name="panel" Orientation="Horizontal">
@@ -21,12 +21,17 @@
         <DataTemplate x:Key="VideoFileTemplate">
             <StackPanel x:Name="panel" Orientation="Vertical">
                 <TextBlock Text="{Binding Path=Item.Name}" />
-                <MediaElement x:Name="mediaElement" Source="{Binding Path=Item.FullName}" LoadedBehavior="Play" MediaOpened="mediaElement_MediaOpened" />
-                <Slider x:Name="slider" Margin="16" Minimum="0" />
+                <MediaElement x:Name="mediaElement" Source="{Binding Path=Item.FullName}" LoadedBehavior="Play"
+                              MediaOpened="OnMediaElementMediaOpened"
+                              MediaEnded="OnMediaElementMediaEnded"
+                              MediaFailed="OnMediaElementMediaFailed" />
+                <Slider x:Name="slider" Margin="16" Minimum="0"
+                        Thumb.DragStarted="OnThumbDragStarted"
+                        Thumb.DragCompleted="OnThumbDragCompleted" />
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="{Binding Path=Value, ElementName=slider, StringFormat=HH:mm:ss}" />
+                    <TextBlock Text="{Binding Path=Value, ElementName=slider, Converter={StaticResource SecondsToStringConverter}}" />
                     <TextBlock Text=" / " />
-                    <!--<TextBlock Text="{Binding Path=NaturalDuration, ElementName=mediaElement, Converter={StaticResource DurationToStringConverter}, UpdateSourceTrigger=PropertyChanged}" />-->
+                    <TextBlock Text="{Binding Path=Maximum, ElementName=slider, Converter={StaticResource SecondsToStringConverter}}" />
                 </StackPanel>
             </StackPanel>
         </DataTemplate>

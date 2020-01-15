@@ -1,67 +1,79 @@
 ﻿using System;
-using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
+using System.Windows.Controls.Primitives;
+using System.Windows.Threading;
 
 namespace RagiFiler.Views.Controls
 {
     public partial class FilePreview : UserControl
     {
+        private MediaElement _mediaElement;
+        private Slider _slider;
+        private DispatcherTimer _timer;
+        private bool _isDragging;
+
         public FilePreview()
         {
             InitializeComponent();
+
+            _timer = new DispatcherTimer(DispatcherPriority.Normal);
+            _timer.Interval = TimeSpan.FromSeconds(1);
+            _timer.Tick += OnTimerTick;
         }
 
-        private void mediaElement_MediaOpened(object sender, RoutedEventArgs e)
+        private void OnTimerTick(object sender, EventArgs e)
+        {
+            if (_isDragging)
+            {
+                return;
+            }
+
+            _slider.Value = _mediaElement.Position.TotalSeconds;
+        }
+
+        private void OnMediaElementMediaOpened(object sender, RoutedEventArgs e)
         {
             if (!(sender is MediaElement mediaElement))
             {
                 return;
             }
 
+            _mediaElement = mediaElement;
+
             var parent = mediaElement.Parent;
 
-            var slider = parent.GetChildren().OfType<Slider>().FirstOrDefault();
-            if (slider != null)
+            _slider = parent.GetChildren().OfType<Slider>().FirstOrDefault();
+            if (_slider != null)
             {
-                slider.Maximum = mediaElement.NaturalDuration.TimeSpan.TotalSeconds;
-                slider.ValueChanged += OnSliderValueChanged;
+                _slider.Maximum = mediaElement.NaturalDuration.TimeSpan.TotalSeconds;
+                _slider.Value = 0d;
             }
+
+            _timer.Start();
         }
 
-        private void OnSliderValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        private void OnMediaElementMediaEnded(object sender, RoutedEventArgs e)
         {
+            _timer.Stop();
+        }
+
+        private void OnMediaElementMediaFailed(object sender, RoutedEventArgs e)
+        {
+            _timer.Stop();
+        }
+
+        private void OnThumbDragStarted(object sender, DragStartedEventArgs e)
+        {
+            _isDragging = true;
+        }
+
+        private void OnThumbDragCompleted(object sender, DragCompletedEventArgs e)
+        {
+            _isDragging = false;
+            _mediaElement.Position = TimeSpan.FromSeconds(_slider.Value);
         }
     }
 
-    [ValueConversion(typeof(Duration), typeof(string))]
-    class DurationToStringConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (!(value is Duration duration))
-            {
-                return null;
-            }
-
-            if (targetType != typeof(string))
-            {
-                return null;
-            }
-
-            if (!duration.HasTimeSpan)
-            {
-                return "00:00:00";
-            }
-
-            return duration.TimeSpan.ToString("HH:mm:ss", culture.DateTimeFormat);
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return null;
-        }
-    }
 }
