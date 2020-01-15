@@ -21,12 +21,12 @@
         <DataTemplate x:Key="VideoFileTemplate">
             <StackPanel x:Name="panel" Orientation="Vertical">
                 <TextBlock Text="{Binding Path=Item.Name}" />
-                <MediaElement x:Name="mediaElement" Source="{Binding Path=Item.FullName}" LoadedBehavior="Play" />
+                <MediaElement x:Name="mediaElement" Source="{Binding Path=Item.FullName}" LoadedBehavior="Play" MediaOpened="mediaElement_MediaOpened" />
                 <Slider x:Name="slider" Margin="16" Minimum="0" />
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="{Binding Path=Value, ElementName=slider, StringFormat=HH:mm:ss}" />
                     <TextBlock Text=" / " />
-                    <TextBlock Text="{Binding Path=NaturalDuration, ElementName=mediaElement, Converter={StaticResource DurationToStringConverter}, UpdateSourceTrigger=PropertyChanged}" />
+                    <!--<TextBlock Text="{Binding Path=NaturalDuration, ElementName=mediaElement, Converter={StaticResource DurationToStringConverter}, UpdateSourceTrigger=PropertyChanged}" />-->
                 </StackPanel>
             </StackPanel>
         </DataTemplate>
