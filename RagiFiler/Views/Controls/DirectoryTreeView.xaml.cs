@@ -2,9 +2,9 @@
 
 namespace RagiFiler.Views.Controls
 {
-    public partial class TreeView : UserControl
+    public partial class DirectoryTreeView : UserControl
     {
-        public TreeView()
+        public DirectoryTreeView()
         {
             InitializeComponent();
         }

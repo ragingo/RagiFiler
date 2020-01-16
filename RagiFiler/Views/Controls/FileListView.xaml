@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="RagiFiler.Views.Controls.ListView"
+﻿<UserControl x:Class="RagiFiler.Views.Controls.FileListView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -13,10 +13,6 @@
 
         <DataTemplate x:Key="DefaultFileTemplate">
             <StackPanel x:Name="panel" Orientation="Horizontal">
-                <StackPanel.InputBindings>
-                    <MouseBinding Gesture="LeftClick" Command="{Binding Path=DataContext.MouseClick, RelativeSource={RelativeSource AncestorType=ListView, Mode=FindAncestor}}" CommandParameter="{Binding Path=.}" />
-                    <MouseBinding Gesture="LeftDoubleClick" Command="{Binding Path=DataContext.MouseDoubleClick, RelativeSource={RelativeSource AncestorType=ListView, Mode=FindAncestor}}" CommandParameter="{Binding Path=.}" />
-                </StackPanel.InputBindings>
                 <Image x:Name="icon" Source="{Binding Path=Icon}" Width="16" Height="16" Margin="3,0,3,0" />
                 <TextBlock x:Name="name" Text="{Binding Path=Item.Name}" />
             </StackPanel>
@@ -29,10 +25,6 @@
 
         <DataTemplate x:Key="VideoFileTemplate">
             <StackPanel x:Name="panel" Orientation="Horizontal" ToolTipService.ShowDuration="{x:Static sys:Int32.MaxValue}">
-                <StackPanel.InputBindings>
-                    <MouseBinding Gesture="LeftClick" Command="{Binding Path=DataContext.MouseClick, RelativeSource={RelativeSource AncestorType=ListView, Mode=FindAncestor}}" CommandParameter="{Binding Path=.}" />
-                    <MouseBinding Gesture="LeftDoubleClick" Command="{Binding Path=DataContext.MouseDoubleClick, RelativeSource={RelativeSource AncestorType=ListView, Mode=FindAncestor}}" CommandParameter="{Binding Path=.}" />
-                </StackPanel.InputBindings>
                 <Image x:Name="icon" Source="{Binding Path=Icon}" Width="16" Height="16" Margin="3,0,3,0" />
                 <TextBlock x:Name="name" Text="{Binding Path=Item.Name}" />
                 <!--<StackPanel.ToolTip>
@@ -53,7 +45,7 @@
     </UserControl.Resources>
 
     <Grid>
-        <ListView ItemsSource="{Binding Path=Entries}">
+        <ListView ItemsSource="{Binding Path=Entries}" SelectionChanged="OnSelectionChanged" MouseDoubleClick="OnMouseDoubleClick">
             <ListView.View>
                 <GridView>
                     <GridView.Columns>

@@ -14,17 +14,17 @@ namespace RagiFiler.ViewModels.Components
 
         public ObservableCollection<FileListViewItemViewModel> Entries { get; } = new ObservableCollection<FileListViewItemViewModel>();
 
-        public ReactiveCommand<object> MouseClick { get; } = new ReactiveCommand<object>();
+        public ReactiveCommand<object> SelectionChangedCommand { get; } = new ReactiveCommand<object>();
         public ReactiveCommand<object> MouseDoubleClick { get; } = new ReactiveCommand<object>();
 
         public FileListViewViewModel()
         {
             Directory.Subscribe(OnDirectoryChanged);
-            MouseClick.Subscribe(OnMouseClick);
+            SelectionChangedCommand.Subscribe(OnSelectionChanged);
             MouseDoubleClick.Subscribe(OnMouseDoubleClick);
         }
 
-        private void OnMouseClick(object value)
+        private void OnSelectionChanged(object value)
         {
             if (value == null)
             {
