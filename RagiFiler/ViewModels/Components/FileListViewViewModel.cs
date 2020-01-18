@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using RagiFiler.IO;
+using RagiFiler.Native.Com;
 using Reactive.Bindings;
 
 namespace RagiFiler.ViewModels.Components
@@ -37,6 +38,13 @@ namespace RagiFiler.ViewModels.Components
             }
 
             SelectedItem.Value = item;
+
+            using var app = new ShellApplication();
+            var verbs = app.GetFolderVerbsTest(item.Item.FullName);
+            foreach (var verb in verbs)
+            {
+                Debug.WriteLine(verb);
+            }
         }
 
         private void OnMouseDoubleClick(object value)
