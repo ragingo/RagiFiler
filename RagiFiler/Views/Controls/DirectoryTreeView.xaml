@@ -12,6 +12,7 @@
 
     <UserControl.Resources>
         <ResourceDictionary>
+
             <HierarchicalDataTemplate DataType="{x:Type vm_components:DirectoryTreeViewItemViewModel}" ItemsSource="{Binding Path=Children}">
                 <StackPanel x:Name="panel" Orientation="Horizontal">
                     <Image x:Name="icon" Source="{Binding Path=Icon}" Width="16" Height="16" Margin="3,0,3,0" />
@@ -26,14 +27,24 @@
                     </DataTrigger>
                 </HierarchicalDataTemplate.Triggers>
             </HierarchicalDataTemplate>
+
+            <Style x:Key="TreeViewItemStyle" BasedOn="{StaticResource MaterialDesignTreeViewItem}" TargetType="TreeViewItem">
+                <Style.Setters>
+                    <Setter Property="Padding" Value="4" />
+                </Style.Setters>
+            </Style>
+
         </ResourceDictionary>
     </UserControl.Resources>
 
     <Grid>
         <TreeView ItemsSource="{Binding Path=Root.Children}">
             <TreeView.ItemContainerStyle>
-                <Style>
+                <Style BasedOn="{StaticResource TreeViewItemStyle}" TargetType="TreeViewItem">
                     <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="IsExpanded" Value="True" />
+                        </Trigger>
                         <MultiDataTrigger>
                             <MultiDataTrigger.Conditions>
                                 <Condition Binding="{Binding Path=IsHiddenFile}" Value="True" />
