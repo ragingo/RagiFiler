@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:conv="clr-namespace:RagiFiler.Views.Converters"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
@@ -26,7 +27,9 @@
                           MediaFailed="OnMediaElementMediaFailed" />
             </Border>
             <StackPanel Orientation="Horizontal" Height="30">
-                <Button x:Name="playButton" Width="20" Height="20" Click="OnPlayButtonClick" />
+                <Button x:Name="playButton" Click="OnPlayButtonClick">
+                    <md:PackIcon Kind="Play" />
+                </Button>
             </StackPanel>
             <Slider x:Name="slider" Margin="16" Minimum="0"
                         Thumb.DragStarted="OnThumbDragStarted"

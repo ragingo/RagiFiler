@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Threading;
+using MaterialDesignThemes.Wpf;
 using RagiFiler.Controls;
 
 namespace RagiFiler.Views.Controls
@@ -124,11 +125,11 @@ namespace RagiFiler.Views.Controls
         {
             if (_isPlaying)
             {
-                _playButton.Content = "⏸️";
+                _playButton.Content = new PackIcon { Kind = PackIconKind.Pause };
             }
             else
             {
-                _playButton.Content = "▶️";
+                _playButton.Content = new PackIcon { Kind = PackIconKind.Play };
             }
         }
     }
