@@ -1,0 +1,41 @@
+﻿<UserControl x:Class="RagiFiler.Views.Controls.VideoPreview"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:conv="clr-namespace:RagiFiler.Views.Converters"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <conv:SecondsToStringConverter x:Key="SecondsToStringConverter" />
+    </UserControl.Resources>
+
+    <Grid>
+        <StackPanel x:Name="panel" Orientation="Vertical">
+            <TextBlock Text="{Binding Path=Item.Name}" />
+            <Border Background="Black">
+                <MediaElement x:Name="mediaElement"
+                          Width="Auto"
+                          Height="300"
+                          Source="{Binding Path=Item.FullName}"
+                          LoadedBehavior="Manual"
+                          UnloadedBehavior="Stop"
+                          MediaOpened="OnMediaElementMediaOpened"
+                          MediaEnded="OnMediaElementMediaEnded"
+                          MediaFailed="OnMediaElementMediaFailed" />
+            </Border>
+            <StackPanel Orientation="Horizontal" Height="30">
+                <Button x:Name="playButton" Width="20" Height="20" Click="OnPlayButtonClick" />
+            </StackPanel>
+            <Slider x:Name="slider" Margin="16" Minimum="0"
+                        Thumb.DragStarted="OnThumbDragStarted"
+                        Thumb.DragCompleted="OnThumbDragCompleted" />
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding Path=Value, ElementName=slider, Converter={StaticResource SecondsToStringConverter}}" />
+                <TextBlock Text=" / " />
+                <TextBlock Text="{Binding Path=Maximum, ElementName=slider, Converter={StaticResource SecondsToStringConverter}}" />
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>

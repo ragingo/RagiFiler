@@ -1,0 +1,33 @@
+﻿<UserControl x:Class="RagiFiler.Views.Controls.FilePreview"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:conv="clr-namespace:RagiFiler.Views.Converters"
+             xmlns:controls="clr-namespace:RagiFiler.Views.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.Resources>
+
+        <conv:SecondsToStringConverter x:Key="SecondsToStringConverter" />
+
+        <DataTemplate x:Key="DefaultFileTemplate">
+            <StackPanel x:Name="panel" Orientation="Horizontal">
+                <TextBlock Text="{Binding Path=Item.Name}" />
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="VideoFileTemplate">
+            <controls:VideoPreview DataContext="{Binding}" />
+        </DataTemplate>
+
+        <controls:FilePreviewDataTemplateSelector x:Key="FilePreviewDataTemplateSelector" />
+
+    </UserControl.Resources>
+
+    <controls:FilePreviewContentControl Content="{Binding Path=.}" Width="Auto" Height="Auto"
+                                        ContentTemplateSelector="{StaticResource FilePreviewDataTemplateSelector}" />
+
+
+</UserControl>

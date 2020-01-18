@@ -5,5 +5,8 @@
 
 using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("Performance", "CA1812:インスタンス化されていない内部クラスを使用しません", Justification = "<保留中>", Scope = "type", Target = "~T:RagiFiler.ViewModels.MainWindowViewModel")]
-[assembly: SuppressMessage("Performance", "CA1812:インスタンス化されていない内部クラスを使用しません", Justification = "<保留中>", Scope = "type", Target = "~T:RagiFiler.Views.Templates.FilePreviewDataTemplateSelector")]
 [assembly: SuppressMessage("Performance", "CA1812:インスタンス化されていない内部クラスを使用しません", Justification = "<保留中>", Scope = "type", Target = "~T:RagiFiler.Views.Converters.SecondsToStringConverter")]
+[assembly: SuppressMessage("Performance", "CA1812:インスタンス化されていない内部クラスを使用しません", Justification = "<保留中>", Scope = "type", Target = "~T:RagiFiler.Views.Controls.FilePreviewContentControl")]
+[assembly: SuppressMessage("Performance", "CA1812:インスタンス化されていない内部クラスを使用しません", Justification = "<保留中>", Scope = "type", Target = "~T:RagiFiler.Controls.MediaElementEx")]
+[assembly: SuppressMessage("Performance", "CA1812:インスタンス化されていない内部クラスを使用しません", Justification = "<保留中>", Scope = "type", Target = "~T:RagiFiler.Views.Controls.FilePreviewDataTemplateSelector")]
+[assembly: SuppressMessage("Performance", "CA1812:インスタンス化されていない内部クラスを使用しません", Justification = "<保留中>", Scope = "type", Target = "~T:RagiFiler.Views.Templates.FilePreviewDataTemplateSelector")]
