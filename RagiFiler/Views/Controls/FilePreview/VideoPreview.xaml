@@ -14,7 +14,7 @@
     <Grid>
         <StackPanel x:Name="panel" Orientation="Vertical">
             <TextBlock Text="{Binding Path=Item.Name}" />
-            <Border Background="Black">
+            <Border Background="Black" BorderBrush="Black" BorderThickness="8">
                 <MediaElement x:Name="mediaElement"
                           Width="Auto"
                           Height="300"

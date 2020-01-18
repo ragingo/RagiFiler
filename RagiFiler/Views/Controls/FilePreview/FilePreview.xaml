@@ -4,7 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:conv="clr-namespace:RagiFiler.Views.Converters"
-             xmlns:controls="clr-namespace:RagiFiler.Views.Controls"
+             xmlns:view_controls="clr-namespace:RagiFiler.Views.Controls"
+             xmlns:controls="clr-namespace:RagiFiler.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
@@ -19,15 +20,21 @@
         </DataTemplate>
 
         <DataTemplate x:Key="VideoFileTemplate">
-            <controls:VideoPreview DataContext="{Binding}" />
+            <view_controls:VideoPreview DataContext="{Binding}" />
         </DataTemplate>
 
-        <controls:FilePreviewDataTemplateSelector x:Key="FilePreviewDataTemplateSelector" />
+        <!-- test -->
+        <!--<DataTemplate x:Key="VideoFileTemplate">
+            <controls:MediaElementEx Source="{Binding Path=Item.FullName}" />
+        </DataTemplate>-->
+
+        <view_controls:FilePreviewDataTemplateSelector x:Key="FilePreviewDataTemplateSelector" />
 
     </UserControl.Resources>
 
-    <controls:FilePreviewContentControl Content="{Binding Path=.}" Width="Auto" Height="Auto"
-                                        ContentTemplateSelector="{StaticResource FilePreviewDataTemplateSelector}" />
+    <view_controls:FilePreviewContentControl
+        Content="{Binding Path=.}" Width="Auto" Height="Auto"
+        ContentTemplateSelector="{StaticResource FilePreviewDataTemplateSelector}" />
 
 
 </UserControl>

@@ -5,7 +5,8 @@ using System.Windows.Media;
 
 namespace RagiFiler.Controls
 {
-    class MediaElementEx : ContentControl
+    // TODO: uwp で作ったやつを wpf 向けに移植していく
+    class MediaElementEx : UserControl
     {
         private DrawingBrush _drawingBrush;
         private VideoDrawing _videoDrawing;
@@ -80,12 +81,38 @@ namespace RagiFiler.Controls
             _videoDrawing.Player = _mediaPlayer;
 
             _drawingBrush = new DrawingBrush(_videoDrawing);
+            _drawingBrush.Stretch = Stretch.None;
 
-            SetValue(BackgroundProperty, _drawingBrush);
+            Background = _drawingBrush;
         }
 
         private static void OnSourceChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
+            if (!(sender is MediaElementEx mediaElement))
+            {
+                return;
+            }
+
+            switch (mediaElement.Source)
+            {
+                case Uri src when
+                    src.Scheme.StartsWith("http", StringComparison.OrdinalIgnoreCase) ||
+                    src.Scheme.StartsWith("https", StringComparison.OrdinalIgnoreCase):
+                    mediaElement._mediaPlayer.Open(src);
+                    break;
+
+                case Uri src when src.Scheme.StartsWith("rtmp", StringComparison.OrdinalIgnoreCase):
+                    // TODO: ffmpeg interop
+                    break;
+
+                case Uri src:
+                    mediaElement._mediaPlayer.Open(src);
+                    break;
+
+                case string src:
+                    mediaElement._mediaPlayer.Open(new Uri(src));
+                    break;
+            }
         }
 
         private static void OnPositionChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
@@ -102,6 +129,8 @@ namespace RagiFiler.Controls
 
         private void OnMediaOpened(object sender, EventArgs e)
         {
+            _mediaPlayer.Position = InitialPosition;
+            _mediaPlayer.Play();
         }
 
         private void OnMediaEnded(object sender, EventArgs e)
@@ -116,7 +145,7 @@ namespace RagiFiler.Controls
         {
             base.OnRenderSizeChanged(sizeInfo);
 
-            _videoDrawing.Rect = new Rect(sizeInfo.NewSize);
+            _videoDrawing.Rect = new Rect(0, 0, sizeInfo.NewSize.Width, sizeInfo.NewSize.Width * 0.5625);
         }
     }
 }
