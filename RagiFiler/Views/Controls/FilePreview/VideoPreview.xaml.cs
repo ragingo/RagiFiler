@@ -18,6 +18,7 @@ namespace RagiFiler.Views.Controls
         private bool _isDragging;
         private bool _isPlaying;
         private bool _isAutoPlay = true; // TODO: 直す
+        private bool _isRepeatEnabled = true; // TODO: 直す
 
         public VideoPreview()
         {
@@ -39,6 +40,7 @@ namespace RagiFiler.Views.Controls
             if (e.Property.Name == "DataContext")
             {
                 _timer.Stop();
+                _mediaElement.Stop();
                 _mediaElement.Close();
 
                 base.OnPropertyChanged(e);
@@ -78,11 +80,19 @@ namespace RagiFiler.Views.Controls
 
         private void OnMediaElementMediaEnded(object sender, RoutedEventArgs e)
         {
-            _isPlaying = false;
-            UpdatePlayButtonContent();
+            if (_isRepeatEnabled)
+            {
+                _mediaElement.Position = TimeSpan.FromSeconds(0);
+                _slider.Value = 0;
+            }
+            else
+            {
+                _isPlaying = false;
+                UpdatePlayButtonContent();
 
-            _mediaElement.Stop();
-            _timer.Stop();
+                _mediaElement.Stop();
+                _timer.Stop();
+            }
         }
 
         private void OnMediaElementMediaFailed(object sender, RoutedEventArgs e)
@@ -97,12 +107,24 @@ namespace RagiFiler.Views.Controls
         private void OnThumbDragStarted(object sender, DragStartedEventArgs e)
         {
             _isDragging = true;
+            _isPlaying = false;
+            UpdatePlayButtonContent();
+            _mediaElement.Pause();
+            _mediaElement.ScrubbingEnabled = true;
+        }
+
+        private void OnThumbDragDelta(object sender, DragDeltaEventArgs e)
+        {
+            _mediaElement.Position = TimeSpan.FromSeconds(_slider.Value);
         }
 
         private void OnThumbDragCompleted(object sender, DragCompletedEventArgs e)
         {
             _isDragging = false;
-            _mediaElement.Position = TimeSpan.FromSeconds(_slider.Value);
+            _isPlaying = true;
+            UpdatePlayButtonContent();
+            _mediaElement.ScrubbingEnabled = false;
+            _mediaElement.Play();
         }
 
         private void OnPlayButtonClick(object sender, RoutedEventArgs e)

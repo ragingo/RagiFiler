@@ -32,8 +32,9 @@
                 </Button>
             </StackPanel>
             <Slider x:Name="slider" Margin="16" Minimum="0"
-                        Thumb.DragStarted="OnThumbDragStarted"
-                        Thumb.DragCompleted="OnThumbDragCompleted" />
+                    Thumb.DragStarted="OnThumbDragStarted"
+                    Thumb.DragDelta="OnThumbDragDelta"
+                    Thumb.DragCompleted="OnThumbDragCompleted" />
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="{Binding Path=Value, ElementName=slider, Converter={StaticResource SecondsToStringConverter}}" />
                 <TextBlock Text=" / " />
