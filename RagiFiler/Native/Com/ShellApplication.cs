@@ -4,6 +4,26 @@ using System.IO;
 
 namespace RagiFiler.Native.Com
 {
+    class Folder2 : IDisposable
+    {
+        private ComObject _shell;
+
+        public Folder2(ComObject shell)
+        {
+            _shell = shell;
+        }
+
+        public ComObject Items()
+        {
+            return new ComObject(_shell.InvokeMethod("Items"));
+        }
+
+        public void Dispose()
+        {
+            _shell.Dispose();
+        }
+    }
+
     class ShellApplication : IDisposable
     {
         private ComObject _instance;
@@ -11,6 +31,25 @@ namespace RagiFiler.Native.Com
         public ShellApplication()
         {
             _instance = ComObject.CreateFromProgID("shell.application");
+        }
+
+        public void Dispose()
+        {
+            _instance.Dispose();
+        }
+
+        public Folder2 NameSpace(string path)
+        {
+            return new Folder2(new ComObject(_instance.InvokeMethod("NameSpace", path)));
+        }
+
+        public IEnumerable<string> GetFolderVerbsTest2(string path)
+        {
+            string dir = Path.GetDirectoryName(path);
+            using var folder = NameSpace(dir);
+            using var items = folder.Items();
+            int itemCount = items.GetProperty<int>("Count");
+            yield return "TODO: ";
         }
 
         public IEnumerable<string> GetFolderVerbsTest(string path)
@@ -38,6 +77,10 @@ namespace RagiFiler.Native.Com
                 {
                     using var verb = new ComObject(verbs.InvokeMethod("Item", j));
                     var verbName = verb.GetProperty<string>("Name");
+                    if (string.IsNullOrEmpty(verbName?.Trim()))
+                    {
+                        continue;
+                    }
                     yield return verbName;
                 }
             }
@@ -47,42 +90,5 @@ namespace RagiFiler.Native.Com
             //var folder = _instance.NameSpace(dir);
         }
 
-        #region IDisposable Support
-        private bool disposedValue = false;
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    // TODO: マネージ状態を破棄します (マネージ オブジェクト)。
-                }
-
-                // TODO: アンマネージ リソース (アンマネージ オブジェクト) を解放し、下のファイナライザーをオーバーライドします。
-                _instance.Dispose();
-                // TODO: 大きなフィールドを null に設定します。
-                _instance = null;
-
-                disposedValue = true;
-            }
-        }
-
-        // TODO: 上の Dispose(bool disposing) にアンマネージ リソースを解放するコードが含まれる場合にのみ、ファイナライザーをオーバーライドします。
-        ~ShellApplication()
-        {
-            // このコードを変更しないでください。クリーンアップ コードを上の Dispose(bool disposing) に記述します。
-            Dispose(false);
-        }
-
-        // このコードは、破棄可能なパターンを正しく実装できるように追加されました。
-        public void Dispose()
-        {
-            // このコードを変更しないでください。クリーンアップ コードを上の Dispose(bool disposing) に記述します。
-            Dispose(true);
-            // TODO: 上のファイナライザーがオーバーライドされる場合は、次の行のコメントを解除してください。
-            GC.SuppressFinalize(this);
-        }
-        #endregion
     }
 }

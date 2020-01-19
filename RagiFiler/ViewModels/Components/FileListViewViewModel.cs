@@ -40,7 +40,7 @@ namespace RagiFiler.ViewModels.Components
             SelectedItem.Value = item;
 
             using var app = new ShellApplication();
-            var verbs = app.GetFolderVerbsTest(item.Item.FullName);
+            var verbs = app.GetFolderVerbsTest2(item.Item.FullName);
             foreach (var verb in verbs)
             {
                 Debug.WriteLine(verb);

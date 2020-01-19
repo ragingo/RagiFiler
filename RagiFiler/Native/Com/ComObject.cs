@@ -6,18 +6,40 @@ using System.Runtime.InteropServices;
 
 namespace RagiFiler.Native.Com
 {
-    class ComObject : CriticalFinalizerObject, IDisposable
+    class ComObject : ComObject<object>
     {
-        private object _instance;
+        public ComObject(object instance) : base(instance)
+        {
+        }
 
-        public ComObject(object instance)
+        public new static ComObject CreateFromProgID(string id)
+        {
+            return new ComObject(Activator.CreateInstance(Type.GetTypeFromProgID(id)));
+        }
+    }
+
+    class ComObject<T> : CriticalFinalizerObject, IDisposable
+    {
+        private T _instance;
+
+        public ComObject(T instance)
         {
             _instance = instance;
         }
 
-        public static ComObject CreateFromProgID(string id)
+        public static implicit operator ComObject<T>(T instance)
         {
-            return new ComObject(Activator.CreateInstance(Type.GetTypeFromProgID(id)));
+            return new ComObject<T>(instance);
+        }
+
+        public T Get()
+        {
+            return _instance;
+        }
+
+        public static ComObject<T> CreateFromProgID(string id)
+        {
+            return new ComObject<T>((T)Activator.CreateInstance(Type.GetTypeFromProgID(id)));
         }
 
         public object InvokeMember(string name, BindingFlags flags = BindingFlags.Default, params object[] args)
@@ -25,14 +47,14 @@ namespace RagiFiler.Native.Com
             return _instance.GetType().InvokeMember(name, flags, null, _instance, args, CultureInfo.InvariantCulture);
         }
 
-        public T InvokeMember<T>(string name, BindingFlags flags = BindingFlags.Default, params object[] args)
+        public TResult InvokeMember<TResult>(string name, BindingFlags flags = BindingFlags.Default, params object[] args)
         {
-            return (T)_instance.GetType().InvokeMember(name, flags, null, _instance, args, CultureInfo.InvariantCulture);
+            return (TResult)_instance.GetType().InvokeMember(name, flags, null, _instance, args, CultureInfo.InvariantCulture);
         }
 
-        public T GetProperty<T>(string name)
+        public TResult GetProperty<TResult>(string name)
         {
-            return InvokeMember<T>(name, BindingFlags.GetProperty);
+            return InvokeMember<TResult>(name, BindingFlags.GetProperty);
         }
 
         public object InvokeMethod(string name, params object[] args)
@@ -40,9 +62,9 @@ namespace RagiFiler.Native.Com
             return InvokeMember(name, BindingFlags.InvokeMethod, args);
         }
 
-        public T InvokeMethod<T>(string name, params object[] args)
+        public TResult InvokeMethod<TResult>(string name, params object[] args)
         {
-            return InvokeMember<T>(name, BindingFlags.InvokeMethod, args);
+            return InvokeMember<TResult>(name, BindingFlags.InvokeMethod, args);
         }
 
         #region IDisposable Support
@@ -60,7 +82,7 @@ namespace RagiFiler.Native.Com
                 // TODO: アンマネージ リソース (アンマネージ オブジェクト) を解放し、下のファイナライザーをオーバーライドします。
                 Marshal.FinalReleaseComObject(_instance);
                 // TODO: 大きなフィールドを null に設定します。
-                _instance = null;
+                _instance = default(T);
 
                 disposedValue = true;
             }
