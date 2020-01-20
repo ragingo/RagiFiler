@@ -4,26 +4,8 @@ using System.IO;
 
 namespace RagiFiler.Native.Com
 {
-    class Folder2 : IDisposable
-    {
-        private ComObject _shell;
-
-        public Folder2(ComObject shell)
-        {
-            _shell = shell;
-        }
-
-        public ComObject Items()
-        {
-            return new ComObject(_shell.InvokeMethod("Items"));
-        }
-
-        public void Dispose()
-        {
-            _shell.Dispose();
-        }
-    }
-
+    // TODO: .net core 3.1 で dynamic で com object のメンバにアクセスできない・・・修正されたら dynamic に切り替える
+    // あれ・・・？ https://github.com/dotnet/corefx/issues/32630
     class ShellApplication : IDisposable
     {
         private ComObject _instance;
@@ -40,7 +22,7 @@ namespace RagiFiler.Native.Com
 
         public Folder2 NameSpace(string path)
         {
-            return new Folder2(new ComObject(_instance.InvokeMethod("NameSpace", path)));
+            return new Folder2(_instance.InvokeMethod("NameSpace", path).AsComObject());
         }
 
         public IEnumerable<string> GetFolderVerbsTest2(string path)
@@ -48,47 +30,30 @@ namespace RagiFiler.Native.Com
             string dir = Path.GetDirectoryName(path);
             using var folder = NameSpace(dir);
             using var items = folder.Items();
-            int itemCount = items.GetProperty<int>("Count");
-            yield return "TODO: ";
-        }
 
-        public IEnumerable<string> GetFolderVerbsTest(string path)
-        {
-            string dir = Path.GetDirectoryName(path);
-
-            using var folder = new ComObject(_instance.InvokeMethod("NameSpace", dir));
-            using var items = new ComObject(folder.InvokeMethod("Items"));
-            int itemsCount = items.GetProperty<int>("Count");
-
-            for (int i = 0; i < itemsCount; i++)
+            for (int i = 0; i < items.Count; i++)
             {
-                using var item = new ComObject(items.InvokeMethod("Item", i));
-                var itemPath = item.GetProperty<string>("Path");
+                using var item = items.Item(i);
 
-                if (Path.GetFullPath(itemPath) != Path.GetFullPath(path))
+                if (Path.GetFullPath(item.Path) != Path.GetFullPath(path))
                 {
                     continue;
                 }
 
-                using var verbs = new ComObject(item.InvokeMethod("Verbs"));
-                var verbsCount = verbs.GetProperty<int>("Count");
+                using var verbs = item.Verbs();
 
-                for (int j = 0; j < verbsCount; j++)
+                for (int j = 0; j < verbs.Count; j++)
                 {
-                    using var verb = new ComObject(verbs.InvokeMethod("Item", j));
-                    var verbName = verb.GetProperty<string>("Name");
-                    if (string.IsNullOrEmpty(verbName?.Trim()))
+                    using var verb = verbs.Item(j);
+
+                    if (string.IsNullOrEmpty(verb.Name?.Trim()))
                     {
                         continue;
                     }
-                    yield return verbName;
+
+                    yield return verb.Name;
                 }
             }
-
-            // TODO: .net core 3.1 で dynamic で com object のメンバにアクセスできない・・・修正されたら dynamic に切り替える
-            // あれ・・・？ https://github.com/dotnet/corefx/issues/32630
-            //var folder = _instance.NameSpace(dir);
         }
-
     }
 }

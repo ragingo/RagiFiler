@@ -6,13 +6,32 @@ using System.Runtime.InteropServices;
 
 namespace RagiFiler.Native.Com
 {
+    static class ComObjectExtensions
+    {
+        public static ComObject AsComObject(this object obj)
+        {
+            return new ComObject(obj);
+        }
+
+        public static ComObject<T> AsComObject<T>(this T obj)
+        {
+            return new ComObject<T>(obj);
+        }
+    }
+
+    interface IComCollection<T>
+    {
+        int Count { get; }
+        T Item(int index);
+    }
+
     class ComObject : ComObject<object>
     {
         public ComObject(object instance) : base(instance)
         {
         }
 
-        public new static ComObject CreateFromProgID(string id)
+        public static new ComObject CreateFromProgID(string id)
         {
             return new ComObject(Activator.CreateInstance(Type.GetTypeFromProgID(id)));
         }
@@ -24,6 +43,10 @@ namespace RagiFiler.Native.Com
 
         public ComObject(T instance)
         {
+            if (instance == null)
+            {
+                throw new ArgumentNullException(nameof(instance));
+            }
             _instance = instance;
         }
 
@@ -82,7 +105,7 @@ namespace RagiFiler.Native.Com
                 // TODO: アンマネージ リソース (アンマネージ オブジェクト) を解放し、下のファイナライザーをオーバーライドします。
                 Marshal.FinalReleaseComObject(_instance);
                 // TODO: 大きなフィールドを null に設定します。
-                _instance = default(T);
+                _instance = default;
 
                 disposedValue = true;
             }
