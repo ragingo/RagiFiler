@@ -75,6 +75,21 @@
                     </Style.Triggers>
                 </Style>
             </ListView.ItemContainerStyle>
+            <ListView.ContextMenu>
+                <ContextMenu ItemsSource="{Binding Path=ContextMenuItems}">
+                    <ContextMenu.ItemContainerStyle>
+                        <Style TargetType="MenuItem">
+                            <Setter Property="Command" Value="{Binding Path=DataContext.ContextMenuItemClick, RelativeSource={RelativeSource AncestorType=Grid, Mode=FindAncestor}}" />
+                            <Setter Property="CommandParameter" Value="{Binding Path=.}" />
+                        </Style>
+                    </ContextMenu.ItemContainerStyle>
+                    <ContextMenu.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=Name}" />
+                        </DataTemplate>
+                    </ContextMenu.ItemTemplate>
+                </ContextMenu>
+            </ListView.ContextMenu>
         </ListView>
     </Grid>
 </UserControl>

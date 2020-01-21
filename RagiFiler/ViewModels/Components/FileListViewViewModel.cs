@@ -15,15 +15,18 @@ namespace RagiFiler.ViewModels.Components
         public ReactiveProperty<FileListViewItemViewModel> SelectedItem { get; } = new ReactiveProperty<FileListViewItemViewModel>();
 
         public ObservableCollection<FileListViewItemViewModel> Entries { get; } = new ObservableCollection<FileListViewItemViewModel>();
+        public ObservableCollection<FolderItemVerb> ContextMenuItems { get; } = new ObservableCollection<FolderItemVerb>();
 
         public ReactiveCommand<object> SelectionChangedCommand { get; } = new ReactiveCommand<object>();
         public ReactiveCommand<object> MouseDoubleClick { get; } = new ReactiveCommand<object>();
+        public ReactiveCommand<object> ContextMenuItemClick { get; } = new ReactiveCommand<object>();
 
         public FileListViewViewModel()
         {
             Directory.Subscribe(OnDirectoryChanged);
             SelectionChangedCommand.Subscribe(OnSelectionChanged);
             MouseDoubleClick.Subscribe(OnMouseDoubleClick);
+            ContextMenuItemClick.Subscribe(OnContextMenuItemClick);
         }
 
         private void OnSelectionChanged(object value)
@@ -40,11 +43,16 @@ namespace RagiFiler.ViewModels.Components
 
             SelectedItem.Value = item;
 
-            var model = new ContextMenuModel();
-            var verbs = model.GetMenuItems(item.Item.FullName);
-            foreach (var verb in verbs)
+            foreach (var menuItem in ContextMenuItems)
             {
-                Debug.WriteLine(verb);
+                menuItem.Dispose();
+            }
+            ContextMenuItems.Clear();
+
+            var model = new ContextMenuModel();
+            foreach (var menuItem in model.GetMenuItems(item.Item.FullName))
+            {
+                ContextMenuItems.Add(menuItem);
             }
         }
 
@@ -64,6 +72,16 @@ namespace RagiFiler.ViewModels.Components
             psi.UseShellExecute = true;
             psi.FileName = item.Item.FullName;
             Process.Start(psi);
+        }
+
+        private void OnContextMenuItemClick(object value)
+        {
+            if (!(value is FolderItemVerb verb))
+            {
+                return;
+            }
+
+            verb.DoIt();
         }
 
         private async void OnDirectoryChanged(string value)

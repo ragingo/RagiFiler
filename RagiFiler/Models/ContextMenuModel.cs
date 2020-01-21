@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using Prism.Mvvm;
 using RagiFiler.Native.Com;
 
@@ -29,7 +27,7 @@ namespace RagiFiler.Models
 
                 for (int j = 0; j < verbs.Count; j++)
                 {
-                    using var verb = verbs.Item(j);
+                    var verb = verbs.Item(j);
 
                     if (string.IsNullOrEmpty(verb.Name?.Trim()))
                     {
