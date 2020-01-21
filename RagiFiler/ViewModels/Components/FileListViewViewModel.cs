@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using RagiFiler.IO;
+using RagiFiler.Models;
 using RagiFiler.Native.Com;
 using Reactive.Bindings;
 
@@ -39,8 +40,8 @@ namespace RagiFiler.ViewModels.Components
 
             SelectedItem.Value = item;
 
-            using var app = new ShellApplication();
-            var verbs = app.GetFolderVerbsTest2(item.Item.FullName);
+            var model = new ContextMenuModel();
+            var verbs = model.GetMenuItems(item.Item.FullName);
             foreach (var verb in verbs)
             {
                 Debug.WriteLine(verb);

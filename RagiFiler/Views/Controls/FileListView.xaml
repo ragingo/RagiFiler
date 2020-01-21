@@ -27,11 +27,6 @@
             <StackPanel x:Name="panel" Orientation="Horizontal" ToolTipService.ShowDuration="{x:Static sys:Int32.MaxValue}">
                 <Image x:Name="icon" Source="{Binding Path=Icon}" Width="16" Height="16" Margin="3,0,3,0" />
                 <TextBlock x:Name="name" Text="{Binding Path=Item.Name}" />
-                <!--<StackPanel.ToolTip>
-                    <ToolTip>
-                        <MediaElement Width="Auto" Height="Auto" MaxWidth="800" MaxHeight="600" LoadedBehavior="Play" Source="{Binding Path=Item.FullName}" />
-                    </ToolTip>
-                </StackPanel.ToolTip>-->
             </StackPanel>
             <DataTemplate.Triggers>
                 <DataTrigger Binding="{Binding Path=IsSystemFile}" Value="True">
