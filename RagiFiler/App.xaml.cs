@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
+using System.Windows.Threading;
 using Prism.Ioc;
 using Prism.Mvvm;
 using Prism.Unity;
@@ -11,6 +13,14 @@ namespace RagiFiler
     {
         public App()
         {
+            DispatcherUnhandledException += OnDispatcherUnhandledException;
+        }
+
+        private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        {
+            e.Handled = true;
+            string msg = e.Exception.Message + Environment.NewLine + e.Exception.StackTrace;
+            MessageBox.Show(msg, "エラー発生！", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         protected override Window CreateShell()
