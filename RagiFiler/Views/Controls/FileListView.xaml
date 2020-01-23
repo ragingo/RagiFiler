@@ -40,7 +40,7 @@
     </UserControl.Resources>
 
     <Grid>
-        <ListView ItemsSource="{Binding Path=Entries}" SelectionChanged="OnSelectionChanged" MouseDoubleClick="OnMouseDoubleClick">
+        <ListView ItemsSource="{Binding Path=Entries}" SelectionChanged="OnSelectionChanged" MouseDoubleClick="OnMouseDoubleClick" MouseRightButtonUp="OnMouseRightButtonUp">
             <ListView.View>
                 <GridView>
                     <GridView.Columns>

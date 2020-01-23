@@ -19,6 +19,7 @@ namespace RagiFiler.ViewModels.Components
 
         public ReactiveCommand<object> SelectionChangedCommand { get; } = new ReactiveCommand<object>();
         public ReactiveCommand<object> MouseDoubleClick { get; } = new ReactiveCommand<object>();
+        public ReactiveCommand<object> MouseRightClick { get; } = new ReactiveCommand<object>();
         public ReactiveCommand<object> ContextMenuItemClick { get; } = new ReactiveCommand<object>();
 
         public FileListViewViewModel()
@@ -26,6 +27,7 @@ namespace RagiFiler.ViewModels.Components
             Directory.Subscribe(OnDirectoryChanged);
             SelectionChangedCommand.Subscribe(OnSelectionChanged);
             MouseDoubleClick.Subscribe(OnMouseDoubleClick);
+            MouseRightClick.Subscribe(OnMouseRightClick);
             ContextMenuItemClick.Subscribe(OnContextMenuItemClick);
         }
 
@@ -42,18 +44,6 @@ namespace RagiFiler.ViewModels.Components
             }
 
             SelectedItem.Value = item;
-
-            foreach (var menuItem in ContextMenuItems)
-            {
-                menuItem.Dispose();
-            }
-            ContextMenuItems.Clear();
-
-            var model = new ContextMenuModel();
-            foreach (var menuItem in model.GetMenuItems(item.Item.FullName))
-            {
-                ContextMenuItems.Add(menuItem);
-            }
         }
 
         private void OnMouseDoubleClick(object value)
@@ -68,10 +58,42 @@ namespace RagiFiler.ViewModels.Components
                 return;
             }
 
-            var psi = new ProcessStartInfo();
-            psi.UseShellExecute = true;
-            psi.FileName = item.Item.FullName;
-            Process.Start(psi);
+            try
+            {
+                var psi = new ProcessStartInfo();
+                psi.UseShellExecute = true;
+                psi.FileName = item.Item.FullName;
+                Process.Start(psi);
+            }
+            catch (FileNotFoundException)
+            {
+                // TODO: 通知
+            }
+        }
+
+        private void OnMouseRightClick(object value)
+        {
+            if (value == null)
+            {
+                return;
+            }
+
+            if (!(value is FileListViewItemViewModel item))
+            {
+                return;
+            }
+
+            foreach (var menuItem in ContextMenuItems)
+            {
+                menuItem.Dispose();
+            }
+            ContextMenuItems.Clear();
+
+            var model = new ContextMenuModel();
+            foreach (var menuItem in model.GetMenuItems(item.Item.FullName))
+            {
+                ContextMenuItems.Add(menuItem);
+            }
         }
 
         private void OnContextMenuItemClick(object value)

@@ -27,7 +27,9 @@ namespace RagiFiler.Models
 
                 for (int j = 0; j < verbs.Count; j++)
                 {
+#pragma warning disable CA2000 // スコープを失う前にオブジェクトを破棄
                     var verb = verbs.Item(j);
+#pragma warning restore CA2000 // スコープを失う前にオブジェクトを破棄
 
                     if (string.IsNullOrEmpty(verb.Name?.Trim()))
                     {

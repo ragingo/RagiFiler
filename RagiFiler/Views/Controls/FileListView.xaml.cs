@@ -67,5 +67,33 @@ namespace RagiFiler.Views.Controls
                 vm.MouseDoubleClick.Execute(itemVM);
             }
         }
+
+        private void OnMouseRightButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (!(sender is ListView listView))
+            {
+                return;
+            }
+
+            if (!(listView.DataContext is FileListViewViewModel vm))
+            {
+                return;
+            }
+
+            if (!(e.OriginalSource is FrameworkElement element))
+            {
+                return;
+            }
+
+            if (!(element.DataContext is FileListViewItemViewModel itemVM))
+            {
+                return;
+            }
+
+            if (vm.MouseRightClick.CanExecute())
+            {
+                vm.MouseRightClick.Execute(itemVM);
+            }
+        }
     }
 }
