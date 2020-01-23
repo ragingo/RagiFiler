@@ -47,6 +47,10 @@ namespace RagiFiler.Native.Com
             {
                 throw new ArgumentNullException(nameof(instance));
             }
+            if (!Marshal.IsComObject(instance))
+            {
+                throw new ArgumentException("COM オブジェクトではない", nameof(instance));
+            }
             _instance = instance;
         }
 
