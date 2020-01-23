@@ -10,6 +10,7 @@
         d:DesignHeight="600"
         xmlns:prism="http://prismlibrary.com/"
         prism:ViewModelLocator.AutoWireViewModel="True"
+        xmlns:control="clr-namespace:RagiFiler.Controls"
         Width="{Binding Path=Width.Value, Mode=TwoWay}"
         Height="{Binding Path=Height.Value, Mode=TwoWay}"
         Title="RagiFiler">
@@ -55,6 +56,34 @@
                                     <RibbonGroup Header="表示 / 非表示">
                                         <RibbonCheckBox Label="隠しファイル" IsChecked="{Binding RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}, Path=DataContext.ShowHiddenFiles.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                         <RibbonCheckBox Label="システムァイル" IsChecked="{Binding RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}, Path=DataContext.ShowSystemFiles.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    </RibbonGroup>
+                                </RibbonTab>
+                                <RibbonTab Header="検索">
+                                    <RibbonGroup Header="設定">
+                                        <RibbonCheckBox Label="再帰" IsChecked="{Binding RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}, Path=DataContext.RecursiveSearch.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                        <StackPanel Orientation="Horizontal">
+                                            <Label>単位</Label>
+                                            <ComboBox Width="50" HorizontalContentAlignment="Center">
+                                                <ComboBoxItem IsSelected="True">B</ComboBoxItem>
+                                                <ComboBoxItem>KB</ComboBoxItem>
+                                                <ComboBoxItem>MB</ComboBoxItem>
+                                                <ComboBoxItem>GB</ComboBoxItem>
+                                                <ComboBoxItem>TB</ComboBoxItem>
+                                            </ComboBox>
+                                        </StackPanel>
+                                    </RibbonGroup>
+                                    <RibbonGroup Header="検索">
+                                        <StackPanel Orientation="Horizontal">
+                                            <Label>ファイル名</Label>
+                                            <RibbonTextBox Text="{Binding RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}, Path=DataContext.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextBoxWidth="160" />
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Label>ファイルサイズ</Label>
+                                            <Label>Min</Label>
+                                            <control:NumericTextBox Text="{Binding RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}, Path=DataContext.SearchMinSize.Value, StringFormat=#\,#, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="80" HorizontalContentAlignment="Center" />
+                                            <Label>Max</Label>
+                                            <control:NumericTextBox Text="{Binding RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}, Path=DataContext.SearchMaxSize.Value, StringFormat=#\,#, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="80" HorizontalContentAlignment="Center" />
+                                        </StackPanel>
                                     </RibbonGroup>
                                 </RibbonTab>
                             </Ribbon>

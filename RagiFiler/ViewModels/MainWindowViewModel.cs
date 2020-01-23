@@ -17,6 +17,8 @@ namespace RagiFiler.ViewModels
         public ReactiveProperty<int> Height { get; } = new ReactiveProperty<int>(FilerSettings.Default.WindowSize.Height);
         public ReactiveProperty<bool> ShowHiddenFiles { get; } = new ReactiveProperty<bool>(FilerSettings.Default.ShowHiddenFiles);
         public ReactiveProperty<bool> ShowSystemFiles { get; } = new ReactiveProperty<bool>(FilerSettings.Default.ShowSystemFiles);
+        public ReactiveProperty<string> SearchMinSize { get; } = new ReactiveProperty<string>();
+        public ReactiveProperty<string> SearchMaxSize { get; } = new ReactiveProperty<string>();
 
         public ObservableCollection<TabItemViewModel> TabItems { get; } = new ObservableCollection<TabItemViewModel>();
 
