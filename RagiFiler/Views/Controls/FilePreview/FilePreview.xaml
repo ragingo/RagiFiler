@@ -23,6 +23,10 @@
             <view_controls:VideoPreview DataContext="{Binding}" />
         </DataTemplate>
 
+        <DataTemplate x:Key="ImageFileTemplate">
+            <view_controls:ImagePreview DataContext="{Binding}" />
+        </DataTemplate>
+
         <!-- test -->
         <!--<DataTemplate x:Key="VideoFileTemplate">
             <controls:MediaElementEx Source="{Binding Path=Item.FullName}" />

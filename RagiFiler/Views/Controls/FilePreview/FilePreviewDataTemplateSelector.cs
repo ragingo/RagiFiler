@@ -38,6 +38,13 @@ namespace RagiFiler.Views.Controls
                     case ".mkv":
                     case ".mp4":
                         return GetVideoFileTemplate(element);
+                    case ".ico":
+                    case ".bmp":
+                    case ".gif":
+                    case ".jpg":
+                    case ".jpeg":
+                    case ".png":
+                        return GetImageFileTemplate(element);
                     default:
                         return GetDefaultFileTemplate(element);
                 }
@@ -54,6 +61,11 @@ namespace RagiFiler.Views.Controls
         private DataTemplate GetVideoFileTemplate(FrameworkElement element)
         {
             return element.FindResource("VideoFileTemplate") as DataTemplate;
+        }
+
+        private DataTemplate GetImageFileTemplate(FrameworkElement element)
+        {
+            return element.FindResource("ImageFileTemplate") as DataTemplate;
         }
     }
 }
