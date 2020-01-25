@@ -10,6 +10,13 @@ namespace RagiFiler.Views.Controls
         public FileListView()
         {
             InitializeComponent();
+
+            listView.AddHandler(PreviewMouseLeftButtonDownEvent, new MouseButtonEventHandler(OnPreviewMouseLeftButtonDown));
+        }
+
+        private void OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            listView.UnselectAll();
         }
 
         private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -24,19 +31,24 @@ namespace RagiFiler.Views.Controls
                 return;
             }
 
-            if (e.AddedItems.Count == 0)
+            if (e.AddedItems.Count > 0)
             {
-                return;
-            }
+                if (!(e.AddedItems[0] is FileListViewItemViewModel itemVM))
+                {
+                    return;
+                }
 
-            if (!(e.AddedItems[0] is FileListViewItemViewModel itemVM))
-            {
-                return;
+                if (vm.SelectionChangedCommand.CanExecute())
+                {
+                    vm.SelectionChangedCommand.Execute(itemVM);
+                }
             }
-
-            if (vm.SelectionChangedCommand.CanExecute())
+            else if (e.RemovedItems.Count > 0)
             {
-                vm.SelectionChangedCommand.Execute(itemVM);
+                if (vm.SelectionChangedCommand.CanExecute())
+                {
+                    vm.SelectionChangedCommand.Execute(null);
+                }
             }
         }
 

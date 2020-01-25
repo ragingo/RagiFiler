@@ -35,6 +35,7 @@ namespace RagiFiler.ViewModels.Components
         {
             if (value == null)
             {
+                SelectedItem.Value = null;
                 return;
             }
 

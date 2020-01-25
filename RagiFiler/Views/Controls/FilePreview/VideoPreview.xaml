@@ -16,15 +16,16 @@
         <StackPanel x:Name="panel" Orientation="Vertical">
             <TextBlock Text="{Binding Path=Item.Name}" />
             <Border Background="Black" BorderBrush="Black" BorderThickness="8">
-                <MediaElement x:Name="mediaElement"
-                          Width="Auto"
-                          Height="300"
-                          Source="{Binding Path=Item.FullName}"
-                          LoadedBehavior="Manual"
-                          UnloadedBehavior="Stop"
-                          MediaOpened="OnMediaElementMediaOpened"
-                          MediaEnded="OnMediaElementMediaEnded"
-                          MediaFailed="OnMediaElementMediaFailed" />
+                <MediaElement
+                    x:Name="mediaElement"
+                    Width="Auto"
+                    Height="300"
+                    Source="{Binding Path=Item.FullName}"
+                    LoadedBehavior="Manual"
+                    UnloadedBehavior="Close"
+                    MediaOpened="OnMediaElementMediaOpened"
+                    MediaEnded="OnMediaElementMediaEnded"
+                    MediaFailed="OnMediaElementMediaFailed" />
             </Border>
             <StackPanel Orientation="Horizontal" Height="30">
                 <Button x:Name="playButton" Click="OnPlayButtonClick">
