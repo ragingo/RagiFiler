@@ -11,6 +11,7 @@ namespace RagiFiler.ViewModels.Components
         public ReactiveProperty<string> Title { get; } = new ReactiveProperty<string>();
         public DirectoryTreeViewViewModel DirectoryTree { get; } = new DirectoryTreeViewViewModel();
         public FileListViewViewModel FileList { get; } = new FileListViewViewModel();
+        public ReactiveProperty<bool> IsSearchResultVisible { get; } = new ReactiveProperty<bool>();
 
         public TabItemViewModel()
         {

@@ -11,9 +11,14 @@
         xmlns:prism="http://prismlibrary.com/"
         prism:ViewModelLocator.AutoWireViewModel="True"
         xmlns:control="clr-namespace:RagiFiler.Controls"
+        xmlns:conv="clr-namespace:RagiFiler.Views.Converters"
         Width="{Binding Path=Width.Value, Mode=TwoWay}"
         Height="{Binding Path=Height.Value, Mode=TwoWay}"
         Title="RagiFiler">
+
+    <Window.Resources>
+        <conv:BoolToVisibilityConverter x:Key="boolToVisibilityConverter" />
+    </Window.Resources>
 
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
@@ -25,7 +30,7 @@
     </i:Interaction.Triggers>
 
     <Grid>
-        <TabControl ItemsSource="{Binding Path=TabItems}">
+        <TabControl ItemsSource="{Binding Path=TabItems}" SelectedItem="{Binding Path=SelectedTabItem.Value}">
             <TabControl.ItemTemplate>
                 <DataTemplate>
                     <Grid>
@@ -49,6 +54,7 @@
                             <ColumnDefinition Width="500" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
+                        <!-- row 0 menu -->
                         <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">
                             <Ribbon ShowQuickAccessToolBarOnTop="False">
                                 <Ribbon.ApplicationMenu>
@@ -79,7 +85,7 @@
                                     <RibbonGroup Header="検索">
                                         <StackPanel Orientation="Horizontal">
                                             <Label>ファイル名</Label>
-                                            <RibbonTextBox Text="{Binding RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}, Path=DataContext.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextBoxWidth="160" />
+                                            <RibbonTextBox Text="{Binding RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}, Path=DataContext.SearchFileName.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextBoxWidth="160" />
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal">
                                             <Label>ファイルサイズ</Label>
@@ -92,16 +98,23 @@
                                 </RibbonTab>
                             </Ribbon>
                         </Grid>
+                        <!-- row 1 col 0 tree -->
                         <Grid Grid.Row="1" Grid.Column="0">
                             <vc:DirectoryTreeView DataContext="{Binding Path=DirectoryTree}" />
                         </Grid>
                         <GridSplitter Grid.Row="1" Grid.Column="0" Width="2" />
+                        <!-- row 1 col 1 list -->
                         <Grid Grid.Row="1" Grid.Column="1">
                             <vc:FileListView DataContext="{Binding Path=FileList}" />
                         </Grid>
                         <GridSplitter Grid.Row="1" Grid.Column="1" Width="2" />
+                        <!-- row 1 col 2 preview -->
                         <Grid Grid.Row="1" Grid.Column="2">
                             <vc:FilePreview DataContext="{Binding Path=FileList.SelectedItem.Value}" Width="Auto" />
+                        </Grid>
+                        <!-- row 1 col 0-1 search -->
+                        <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+                            <vc:SearchResultView DataContext="{Binding}" Width="Auto" Visibility="{Binding Path=IsSearchResultVisible.Value, Mode=TwoWay, Converter={StaticResource ResourceKey=boolToVisibilityConverter}}" />
                         </Grid>
                     </Grid>
                 </DataTemplate>
