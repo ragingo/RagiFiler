@@ -6,7 +6,7 @@ namespace RagiFiler.Native.Com
     // あれ・・・？ https://github.com/dotnet/corefx/issues/32630
     class ShellApplication : IDisposable
     {
-        private ComObject _instance;
+        private readonly ComObject _instance;
 
         public ShellApplication()
         {

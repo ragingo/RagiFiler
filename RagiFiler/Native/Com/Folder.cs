@@ -4,7 +4,7 @@ namespace RagiFiler.Native.Com
 {
     class Folder2 : IDisposable
     {
-        private ComObject _instance;
+        private readonly ComObject _instance;
 
         public Folder2(ComObject instance)
         {
@@ -24,7 +24,7 @@ namespace RagiFiler.Native.Com
 
     class FolderItems : IComCollection<FolderItem>, IDisposable
     {
-        private ComObject _instance;
+        private readonly ComObject _instance;
 
         public FolderItems(ComObject instance)
         {
@@ -46,7 +46,7 @@ namespace RagiFiler.Native.Com
 
     class FolderItem : IDisposable
     {
-        private ComObject _instance;
+        private readonly ComObject _instance;
 
         public FolderItem(ComObject instance)
         {
@@ -68,7 +68,7 @@ namespace RagiFiler.Native.Com
 
     class FolderItemVerbs : IComCollection<FolderItemVerb>, IDisposable
     {
-        private ComObject _instance;
+        private readonly ComObject _instance;
 
         public FolderItemVerbs(ComObject instance)
         {
@@ -90,7 +90,7 @@ namespace RagiFiler.Native.Com
 
     class FolderItemVerb : IDisposable
     {
-        private ComObject _instance;
+        private readonly ComObject _instance;
 
         public FolderItemVerb(ComObject instance)
         {

@@ -71,9 +71,7 @@ namespace RagiFiler.Controls
                 return;
             }
 
-            int value;
-
-            if (!int.TryParse(Text, out value))
+            if (!int.TryParse(Text, out int value))
             {
                 // 実装上来ないはず
                 Debug.Assert(false);

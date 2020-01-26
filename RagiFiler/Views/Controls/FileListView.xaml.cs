@@ -21,11 +21,6 @@ namespace RagiFiler.Views.Controls
 
         private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (!(sender is ListView listView))
-            {
-                return;
-            }
-
             if (!(listView.DataContext is FileListViewViewModel vm))
             {
                 return;
@@ -54,11 +49,6 @@ namespace RagiFiler.Views.Controls
 
         private void OnMouseDoubleClick(object sender, MouseEventArgs e)
         {
-            if (!(sender is ListView listView))
-            {
-                return;
-            }
-
             if (!(listView.DataContext is FileListViewViewModel vm))
             {
                 return;
@@ -82,11 +72,6 @@ namespace RagiFiler.Views.Controls
 
         private void OnMouseRightButtonUp(object sender, MouseButtonEventArgs e)
         {
-            if (!(sender is ListView listView))
-            {
-                return;
-            }
-
             if (!(listView.DataContext is FileListViewViewModel vm))
             {
                 return;

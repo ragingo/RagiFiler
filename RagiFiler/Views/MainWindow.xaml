@@ -29,7 +29,11 @@
             <TabControl.ItemTemplate>
                 <DataTemplate>
                     <Grid>
-                        <TextBlock Text="{Binding Path=Title.Value}" />
+                        <TextBlock Text="{Binding Path=Title.Value}">
+                            <TextBlock.Style>
+                                <Style BasedOn="{StaticResource MaterialDesignTextBlock}" TargetType="TextBlock" />
+                            </TextBlock.Style>
+                        </TextBlock>
                     </Grid>
                 </DataTemplate>
             </TabControl.ItemTemplate>
