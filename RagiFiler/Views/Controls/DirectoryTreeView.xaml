@@ -41,6 +41,8 @@
         <TreeView ItemsSource="{Binding Path=Root.Children}">
             <TreeView.ItemContainerStyle>
                 <Style BasedOn="{StaticResource TreeViewItemStyle}" TargetType="TreeViewItem">
+                    <Setter Property="IsSelected" Value="{Binding Path=IsSelected.Value, Mode=TwoWay}" />
+                    <Setter Property="IsExpanded" Value="{Binding Path=IsExpanded.Value, Mode=OneWayToSource}" />
                     <Style.Triggers>
                         <Trigger Property="IsSelected" Value="True">
                             <Setter Property="IsExpanded" Value="True" />

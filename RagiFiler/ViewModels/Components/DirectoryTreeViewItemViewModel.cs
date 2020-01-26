@@ -7,6 +7,7 @@ using System.Windows.Media;
 using Prism.Mvvm;
 using RagiFiler.IO;
 using RagiFiler.Media;
+using Reactive.Bindings;
 
 namespace RagiFiler.ViewModels.Components
 {
@@ -18,6 +19,9 @@ namespace RagiFiler.ViewModels.Components
         public bool IsDirectory { get { return Item is DirectoryInfo; } }
         public bool IsHiddenFile { get { return (Item.Attributes & FileAttributes.Hidden) > 0; } }
         public bool IsSystemFile { get { return (Item.Attributes & FileAttributes.System) > 0; } }
+        public ReactiveProperty<bool> IsSelected { get; } = new ReactiveProperty<bool>();
+        public ReactiveProperty<bool> IsExpanded { get; } = new ReactiveProperty<bool>();
+        public ReactiveCommand<bool> SelectionChanged { get; } = new ReactiveCommand<bool>();
 
         private ImageSource _icon;
         public ImageSource Icon
@@ -50,14 +54,31 @@ namespace RagiFiler.ViewModels.Components
             }
         }
 
-        public DirectoryTreeViewItemViewModel(string path)
+        public DirectoryTreeViewItemViewModel(string path) : this(new DirectoryInfo(path))
         {
-            Item = new DirectoryInfo(path);
         }
 
         public DirectoryTreeViewItemViewModel(FileSystemInfo info)
         {
             Item = info;
+            IsSelected.Subscribe(OnSelected);
+        }
+
+        private async void OnSelected(bool value)
+        {
+            if (value)
+            {
+                //DirectoryTreeViewItemViewModel treeViewItem;
+                //if (Parent.TryGetTarget(out treeViewItem))
+                //{
+                //    treeViewItem.IsExpanded.Value = true;
+                //}
+                await LoadSubDirectories().ConfigureAwait(false);
+            }
+
+            //IsExpanded.Value = value;
+
+            SelectionChanged.Execute(value);
         }
 
         public async Task LoadSubDirectories()

@@ -59,6 +59,12 @@ namespace RagiFiler.ViewModels.Components
                 return;
             }
 
+            if (item.IsDirectory)
+            {
+                Directory.Value = item.Item.FullName;
+                return;
+            }
+
             try
             {
                 var psi = new ProcessStartInfo();
