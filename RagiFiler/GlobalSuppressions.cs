@@ -12,3 +12,4 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("Performance", "CA1812:インスタンス化されていない内部クラスを使用しません", Justification = "<保留中>", Scope = "type", Target = "~T:RagiFiler.Views.Templates.FilePreviewDataTemplateSelector")]
 [assembly: SuppressMessage("Performance", "CA1812:インスタンス化されていない内部クラスを使用しません", Justification = "<保留中>", Scope = "type", Target = "~T:RagiFiler.Controls.NumericTextBox")]
 [assembly: SuppressMessage("Performance", "CA1812:インスタンス化されていない内部クラスを使用しません", Justification = "<保留中>", Scope = "type", Target = "~T:RagiFiler.Views.Converters.BoolToVisibilityConverter")]
+[assembly: SuppressMessage("Performance", "CA1812:インスタンス化されていない内部クラスを使用しません", Justification = "<保留中>", Scope = "type", Target = "~T:RagiFiler.ViewModels.Components.RibbonViewModel")]
