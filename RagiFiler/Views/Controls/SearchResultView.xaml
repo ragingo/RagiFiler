@@ -4,17 +4,20 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vc="clr-namespace:RagiFiler.Views.Controls"
              mc:Ignorable="d"
              d:DesignHeight="450"
              d:DesignWidth="800">
     <Grid Background="#FFE1F3E1">
         <Grid.RowDefinitions>
             <RowDefinition Height="32" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Stretch" Background="LightBlue" Width="Auto" FlowDirection="RightToLeft">
             <Button Click="OnCloseButtonClick" Width="50">
                 <md:PackIcon Kind="Close" />
             </Button>
         </StackPanel>
+        <vc:FileListView DataContext="{Binding Path=SearchResultFileList}" Grid.Row="1" />
     </Grid>
 </UserControl>

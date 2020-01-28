@@ -15,6 +15,7 @@ namespace RagiFiler.ViewModels.Components
         public RibbonViewModel Ribbon { get; } = new RibbonViewModel();
         public DirectoryTreeViewViewModel DirectoryTree { get; } = new DirectoryTreeViewViewModel();
         public FileListViewViewModel FileList { get; } = new FileListViewViewModel();
+        public FileListViewViewModel SearchResultFileList { get; } = new FileListViewViewModel();
         public ReactiveProperty<bool> IsSearchResultVisible { get; } = new ReactiveProperty<bool>();
 
         public TabItemViewModel()
@@ -84,9 +85,11 @@ namespace RagiFiler.ViewModels.Components
                 value += "*";
             }
 
+            SearchResultFileList.Entries.Clear();
+
             await foreach (var item in IOUtils.LoadFileSystemInfosAsync(dir, value, true).OfType<FileInfo>())
             {
-                Debug.WriteLine(item.FullName);
+                SearchResultFileList.Entries.Add(new FileListViewItemViewModel(item));
             }
 
             IsSearchResultVisible.Value = true;
