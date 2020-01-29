@@ -18,11 +18,34 @@ namespace RagiFiler.ViewModels.Components
         public FileListViewViewModel SearchResultFileList { get; } = new FileListViewViewModel();
         public ReactiveProperty<bool> IsSearchResultVisible { get; } = new ReactiveProperty<bool>();
 
+        private object _selectedFileListItem;
+        public object SelectedFileListItem
+        {
+            get { return _selectedFileListItem; }
+            private set { SetProperty(ref _selectedFileListItem, value); }
+        }
+
+
         public TabItemViewModel()
         {
             DirectoryTree.SelectedItem.Subscribe(OnSelectedItemChanged);
             FileList.Directory.Subscribe(OnFileListDirectoryChanged);
-            Ribbon.SearchFileName.Subscribe(OnSearchFileNameChanged);
+            Ribbon.SearchFileName.Subscribe(x => OnSearchValueChanged());
+            Ribbon.SearchMinSize.Subscribe(x => OnSearchValueChanged());
+            Ribbon.SearchMaxSize.Subscribe(x => OnSearchValueChanged());
+            IsSearchResultVisible.Subscribe(OnSearchResultVisibleChanged);
+            FileList.SelectedItem.Subscribe(OnFileListSelectedItemChanged);
+            SearchResultFileList.SelectedItem.Subscribe(OnFileListSelectedItemChanged);
+        }
+
+        private void OnFileListSelectedItemChanged(FileListViewItemViewModel value)
+        {
+            SelectedFileListItem = value;
+        }
+
+        private void OnSearchResultVisibleChanged(bool value)
+        {
+            SelectedFileListItem = value ? SearchResultFileList.SelectedItem.Value : FileList.SelectedItem.Value;
         }
 
         public async Task Load(string drive)
@@ -62,8 +85,10 @@ namespace RagiFiler.ViewModels.Components
             }
         }
 
-        private async void OnSearchFileNameChanged(string value)
+        private async void OnSearchValueChanged()
         {
+            SearchResultFileList.Entries.Clear();
+
             if (FileList.Directory == null)
             {
                 return;
@@ -75,20 +100,32 @@ namespace RagiFiler.ViewModels.Components
                 return;
             }
 
-            if (!value.StartsWith("*"))
+            string name = Ribbon.SearchFileName.Value ?? "";
+            if (!name.StartsWith("*"))
             {
-                value = "*" + value;
+                name = "*" + name;
             }
 
-            if (!value.EndsWith("*"))
+            if (!name.EndsWith("*"))
             {
-                value += "*";
+                name += "*";
             }
 
-            SearchResultFileList.Entries.Clear();
-
-            await foreach (var item in IOUtils.LoadFileSystemInfosAsync(dir, value, true).OfType<FileInfo>())
+            await foreach (var item in IOUtils.LoadFileSystemInfosAsync(dir, name, Ribbon.RecursiveSearch.Value).OfType<FileInfo>())
             {
+                // min はどうでもいい
+                _ = long.TryParse(Ribbon.SearchMinSize.Value?.Replace(",", ""), out long min);
+                if (min > item.Length)
+                {
+                    continue;
+                }
+
+                // max は未入力で 0 になるから TryParse の結果を考慮
+                if (long.TryParse(Ribbon.SearchMaxSize.Value?.Replace(",", ""), out long max) && max < item.Length)
+                {
+                    continue;
+                }
+
                 SearchResultFileList.Entries.Add(new FileListViewItemViewModel(item));
             }
 

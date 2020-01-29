@@ -69,7 +69,7 @@
                         <GridSplitter Grid.Row="1" Grid.Column="1" Width="2" />
                         <!-- row 1 col 2 preview -->
                         <Grid Grid.Row="1" Grid.Column="2">
-                            <vc:FilePreview DataContext="{Binding Path=FileList.SelectedItem.Value}" Width="Auto" />
+                            <vc:FilePreview DataContext="{Binding Path=SelectedFileListItem}" Width="Auto" />
                         </Grid>
                         <!-- row 1 col 0-1 search -->
                         <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">

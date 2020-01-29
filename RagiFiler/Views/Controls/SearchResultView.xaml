@@ -11,7 +11,7 @@
     <Grid Background="#FFE1F3E1">
         <Grid.RowDefinitions>
             <RowDefinition Height="32" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Stretch" Background="LightBlue" Width="Auto" FlowDirection="RightToLeft">
             <Button Click="OnCloseButtonClick" Width="50">
