@@ -24,13 +24,10 @@
                     <RibbonCheckBox Label="再帰" IsChecked="{Binding Path=RecursiveSearch.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     <StackPanel Orientation="Horizontal">
                         <Label>単位</Label>
-                        <ComboBox Width="50" HorizontalContentAlignment="Center">
-                            <ComboBoxItem IsSelected="True">B</ComboBoxItem>
-                            <ComboBoxItem>KB</ComboBoxItem>
-                            <ComboBoxItem>MB</ComboBoxItem>
-                            <ComboBoxItem>GB</ComboBoxItem>
-                            <ComboBoxItem>TB</ComboBoxItem>
-                        </ComboBox>
+                        <ComboBox ItemsSource="{Binding Path=SizeUnits, Mode=OneTime}"
+                                  SelectedValue="{Binding Path=SizeUnit.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                  Width="50"
+                                  HorizontalContentAlignment="Center" />
                     </StackPanel>
                 </RibbonGroup>
                 <RibbonGroup Header="検索">
@@ -41,9 +38,13 @@
                     <StackPanel Orientation="Horizontal">
                         <Label>ファイルサイズ</Label>
                         <Label>Min</Label>
-                        <control:NumericTextBox Text="{Binding Path=SearchMinSize.Value, StringFormat=#\,#, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="80" HorizontalContentAlignment="Center" />
+                        <control:NumericTextBox Text="{Binding Path=SearchMinSize.Value, StringFormat=#\,#, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                Width="80"
+                                                HorizontalContentAlignment="Center" />
                         <Label>Max</Label>
-                        <control:NumericTextBox Text="{Binding Path=SearchMaxSize.Value, StringFormat=#\,#, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="80" HorizontalContentAlignment="Center" />
+                        <control:NumericTextBox Text="{Binding Path=SearchMaxSize.Value, StringFormat=#\,#, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                Width="80"
+                                                HorizontalContentAlignment="Center" />
                     </StackPanel>
                 </RibbonGroup>
             </RibbonTab>
