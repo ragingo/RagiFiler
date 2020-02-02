@@ -12,22 +12,29 @@
         <conv:SecondsToStringConverter x:Key="SecondsToStringConverter" />
     </UserControl.Resources>
 
-    <Grid>
-        <StackPanel x:Name="panel" Orientation="Vertical">
+    <Grid Margin="8">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="100" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
             <TextBlock Text="{Binding Path=Item.Name}" />
-            <Border Background="Black" BorderBrush="Black" BorderThickness="8">
-                <MediaElement
-                    x:Name="mediaElement"
-                    Width="Auto"
-                    Height="300"
-                    Source="{Binding Path=Item.FullName}"
-                    LoadedBehavior="Manual"
-                    UnloadedBehavior="Close"
-                    MediaOpened="OnMediaElementMediaOpened"
-                    MediaEnded="OnMediaElementMediaEnded"
-                    MediaFailed="OnMediaElementMediaFailed" />
-            </Border>
-            <StackPanel Orientation="Horizontal" Height="30">
+        </Grid>
+        <DockPanel Background="Black" Grid.Row="1">
+            <MediaElement
+                x:Name="mediaElement"
+                Source="{Binding Path=Item.FullName}"
+                LoadedBehavior="Manual"
+                UnloadedBehavior="Close"
+                MediaOpened="OnMediaElementMediaOpened"
+                MediaEnded="OnMediaElementMediaEnded"
+                MediaFailed="OnMediaElementMediaFailed"
+                Stretch="Uniform"
+                StretchDirection="Both" />
+        </DockPanel>
+        <StackPanel Orientation="Vertical" Grid.Row="2">
+            <StackPanel Orientation="Horizontal" Height="30" Margin="0,4,0,0">
                 <Button x:Name="playButton" Click="OnPlayButtonClick">
                     <md:PackIcon Kind="Play" />
                 </Button>
