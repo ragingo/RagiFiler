@@ -86,7 +86,7 @@ namespace RagiFiler.ViewModels.Components
 
         private async void OnSearchValueChanged()
         {
-            SearchResultFileList.Entries.Clear();
+            SearchResultFileList.ClearEntries();
 
             if (FileList.Directory == null)
             {
@@ -125,7 +125,7 @@ namespace RagiFiler.ViewModels.Components
                     continue;
                 }
 
-                SearchResultFileList.Entries.Add(new FileListViewItemViewModel(item));
+                SearchResultFileList.AddEntry(new FileListViewItemViewModel(item));
             }
 
             IsSearchResultVisible.Value = true;

@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Windows.Data;
 using RagiFiler.IO;
 using RagiFiler.Models;
 using RagiFiler.Native.Com;
@@ -14,21 +17,35 @@ namespace RagiFiler.ViewModels.Components
         public ReactiveProperty<string> Directory { get; } = new ReactiveProperty<string>();
         public ReactiveProperty<FileListViewItemViewModel> SelectedItem { get; } = new ReactiveProperty<FileListViewItemViewModel>();
 
-        public ObservableCollection<FileListViewItemViewModel> Entries { get; } = new ObservableCollection<FileListViewItemViewModel>();
+        private ObservableCollection<FileListViewItemViewModel> _entries { get; } = new ObservableCollection<FileListViewItemViewModel>();
+        public ICollectionView Entries { get; private set; }
         public ObservableCollection<FolderItemVerb> ContextMenuItems { get; } = new ObservableCollection<FolderItemVerb>();
 
         public ReactiveCommand<object> SelectionChangedCommand { get; } = new ReactiveCommand<object>();
         public ReactiveCommand<object> MouseDoubleClick { get; } = new ReactiveCommand<object>();
         public ReactiveCommand<object> MouseRightClick { get; } = new ReactiveCommand<object>();
         public ReactiveCommand<object> ContextMenuItemClick { get; } = new ReactiveCommand<object>();
+        public ReactiveCommand<object> ColumnHeaderClick { get; } = new ReactiveCommand<object>();
 
         public FileListViewViewModel()
         {
+            Entries = CollectionViewSource.GetDefaultView(_entries);
             Directory.Subscribe(OnDirectoryChanged);
             SelectionChangedCommand.Subscribe(OnSelectionChanged);
             MouseDoubleClick.Subscribe(OnMouseDoubleClick);
             MouseRightClick.Subscribe(OnMouseRightClick);
             ContextMenuItemClick.Subscribe(OnContextMenuItemClick);
+            ColumnHeaderClick.Subscribe(OnColumnHeaderClick);
+        }
+
+        public void AddEntry(FileListViewItemViewModel item)
+        {
+            _entries.Add(item);
+        }
+
+        public void ClearEntries()
+        {
+            _entries.Clear();
         }
 
         private void OnSelectionChanged(object value)
@@ -113,6 +130,24 @@ namespace RagiFiler.ViewModels.Components
             verb.DoIt();
         }
 
+        private void OnColumnHeaderClick(object value)
+        {
+            if (!(value is string member))
+            {
+                return;
+            }
+
+            var direction = ListSortDirection.Descending;
+            var lastSort = Entries.SortDescriptions.FirstOrDefault(x => x.PropertyName == member);
+            if (lastSort != null)
+            {
+                direction = lastSort.Direction == ListSortDirection.Ascending ? ListSortDirection.Descending : ListSortDirection.Ascending;
+            }
+
+            Entries.SortDescriptions.Clear();
+            Entries.SortDescriptions.Add(new SortDescription { PropertyName = member, Direction = direction });
+        }
+
         private async void OnDirectoryChanged(string value)
         {
             if (value == null)
@@ -126,13 +161,13 @@ namespace RagiFiler.ViewModels.Components
                 return;
             }
 
-            Entries.Clear();
+            _entries.Clear();
 
             try
             {
                 await foreach (var entry in IOUtils.LoadFileSystemInfosAsync(value))
                 {
-                    Entries.Add(new FileListViewItemViewModel(entry));
+                    _entries.Add(new FileListViewItemViewModel(entry));
                 }
             }
             catch (UnauthorizedAccessException)

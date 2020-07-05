@@ -58,7 +58,8 @@
         <ListView Name="listView" ItemsSource="{Binding Path=Entries}"
                   SelectionChanged="OnSelectionChanged"
                   MouseDoubleClick="OnMouseDoubleClick"
-                  MouseRightButtonUp="OnMouseRightButtonUp">
+                  MouseRightButtonUp="OnMouseRightButtonUp"
+                  GridViewColumnHeader.Click="OnGridViewColumnHeaderClick">
             <ListView.View>
                 <GridView AllowsColumnReorder="True">
                     <GridView.Columns>

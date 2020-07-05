@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using RagiFiler.ViewModels.Components;
 
@@ -90,6 +91,32 @@ namespace RagiFiler.Views.Controls
             if (vm.MouseRightClick.CanExecute())
             {
                 vm.MouseRightClick.Execute(itemVM);
+            }
+        }
+
+        private void OnGridViewColumnHeaderClick(object sender, RoutedEventArgs e)
+        {
+            if (!(listView.DataContext is FileListViewViewModel vm))
+            {
+                return;
+            }
+
+            if (!(e.OriginalSource is GridViewColumnHeader gridViewColumnHeader))
+            {
+                return;
+            }
+
+            var binding = gridViewColumnHeader.Column.DisplayMemberBinding as Binding;
+            if (binding == null)
+            {
+                return;
+            }
+
+            string member = binding.Path.Path;
+
+            if (vm.ColumnHeaderClick.CanExecute())
+            {
+                vm.ColumnHeaderClick.Execute(member);
             }
         }
     }
