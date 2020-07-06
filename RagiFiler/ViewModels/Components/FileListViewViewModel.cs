@@ -17,7 +17,8 @@ namespace RagiFiler.ViewModels.Components
         public ReactiveProperty<string> Directory { get; } = new ReactiveProperty<string>();
         public ReactiveProperty<FileListViewItemViewModel> SelectedItem { get; } = new ReactiveProperty<FileListViewItemViewModel>();
 
-        private ObservableCollection<FileListViewItemViewModel> _entries { get; } = new ObservableCollection<FileListViewItemViewModel>();
+        private ObservableCollection<FileListViewItemViewModel> _rawEntries = new ObservableCollection<FileListViewItemViewModel>();
+        public ReadOnlyCollection<FileListViewItemViewModel> RawEntries { get; private set; }
         public ICollectionView Entries { get; private set; }
         public ObservableCollection<FolderItemVerb> ContextMenuItems { get; } = new ObservableCollection<FolderItemVerb>();
 
@@ -29,7 +30,9 @@ namespace RagiFiler.ViewModels.Components
 
         public FileListViewViewModel()
         {
-            Entries = CollectionViewSource.GetDefaultView(_entries);
+            RawEntries = new ReadOnlyCollection<FileListViewItemViewModel>(_rawEntries);
+            Entries = CollectionViewSource.GetDefaultView(_rawEntries);
+
             Directory.Subscribe(OnDirectoryChanged);
             SelectionChangedCommand.Subscribe(OnSelectionChanged);
             MouseDoubleClick.Subscribe(OnMouseDoubleClick);
@@ -40,12 +43,12 @@ namespace RagiFiler.ViewModels.Components
 
         public void AddEntry(FileListViewItemViewModel item)
         {
-            _entries.Add(item);
+            _rawEntries.Add(item);
         }
 
         public void ClearEntries()
         {
-            _entries.Clear();
+            _rawEntries.Clear();
         }
 
         private void OnSelectionChanged(object value)
@@ -161,13 +164,13 @@ namespace RagiFiler.ViewModels.Components
                 return;
             }
 
-            _entries.Clear();
+            _rawEntries.Clear();
 
             try
             {
                 await foreach (var entry in IOUtils.LoadFileSystemInfosAsync(value))
                 {
-                    _entries.Add(new FileListViewItemViewModel(entry));
+                    _rawEntries.Add(new FileListViewItemViewModel(entry));
                 }
             }
             catch (UnauthorizedAccessException)

@@ -67,6 +67,7 @@
                         <GridViewColumn Header="作成日時" Width="Auto" DisplayMemberBinding="{Binding Path=Item.CreationTime, StringFormat=yyyy/MM/dd\ HH:mm:ss.fff}" />
                         <GridViewColumn Header="更新日時" Width="Auto" DisplayMemberBinding="{Binding Path=Item.LastWriteTime, StringFormat=yyyy/MM/dd\ HH:mm:ss.fff}" />
                         <GridViewColumn Header="サイズ (Byte)" Width="Auto" DisplayMemberBinding="{Binding Path=FileSize, StringFormat=#\,#}" />
+                        <GridViewColumn Header="MD5" Width="Auto" DisplayMemberBinding="{Binding Path=FileHash}" />
                     </GridView.Columns>
                 </GridView>
             </ListView.View>
@@ -89,6 +90,14 @@
                             </MultiDataTrigger.Conditions>
                             <MultiDataTrigger.Setters>
                                 <Setter Property="ListViewItem.Visibility" Value="Collapsed" />
+                            </MultiDataTrigger.Setters>
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=IsDuplicateFile}" Value="True" />
+                            </MultiDataTrigger.Conditions>
+                            <MultiDataTrigger.Setters>
+                                <Setter Property="ListViewItem.Background" Value="LightCoral" />
                             </MultiDataTrigger.Setters>
                         </MultiDataTrigger>
                     </Style.Triggers>

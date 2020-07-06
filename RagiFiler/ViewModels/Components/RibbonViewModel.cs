@@ -14,6 +14,7 @@ namespace RagiFiler.ViewModels.Components
         public ReactiveProperty<string> SearchFileName { get; } = new ReactiveProperty<string>();
         public ReactiveProperty<string> SearchMinSize { get; } = new ReactiveProperty<string>();
         public ReactiveProperty<string> SearchMaxSize { get; } = new ReactiveProperty<string>();
+        public ReactiveProperty<bool> SearchDuplicateFile { get; } = new ReactiveProperty<bool>();
 
         public RibbonViewModel()
         {

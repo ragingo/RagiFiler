@@ -46,6 +46,7 @@
                                                 Width="80"
                                                 HorizontalContentAlignment="Center" />
                     </StackPanel>
+                    <RibbonCheckBox Label="重複ファイルの検出" IsChecked="{Binding Path=SearchDuplicateFile.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </RibbonGroup>
             </RibbonTab>
         </Ribbon>

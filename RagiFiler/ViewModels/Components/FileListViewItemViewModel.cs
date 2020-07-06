@@ -1,6 +1,8 @@
 ﻿using System.IO;
+using System.Threading.Tasks;
 using System.Windows.Media;
 using Prism.Mvvm;
+using RagiFiler.IO;
 using RagiFiler.Media;
 
 namespace RagiFiler.ViewModels.Components
@@ -31,6 +33,20 @@ namespace RagiFiler.ViewModels.Components
                 }
                 return _icon;
             }
+        }
+
+        private string _fileHash;
+        public string FileHash
+        {
+            get { return _fileHash; }
+            set { SetProperty(ref _fileHash, value, nameof(FileHash)); }
+        }
+
+        private bool _isDuplicateFile;
+        public bool IsDuplicateFile
+        {
+            get { return _isDuplicateFile; }
+            set { SetProperty(ref _isDuplicateFile, value, nameof(IsDuplicateFile)); }
         }
 
         public FileListViewItemViewModel(FileSystemInfo info)

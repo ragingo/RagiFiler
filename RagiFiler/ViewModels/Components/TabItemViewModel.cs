@@ -32,6 +32,7 @@ namespace RagiFiler.ViewModels.Components
             Ribbon.SearchFileName.Subscribe(x => OnSearchValueChanged());
             Ribbon.SearchMinSize.Subscribe(x => OnSearchValueChanged());
             Ribbon.SearchMaxSize.Subscribe(x => OnSearchValueChanged());
+            Ribbon.SearchDuplicateFile.Subscribe(x => OnSearchValueChanged());
             IsSearchResultVisible.Subscribe(OnSearchResultVisibleChanged);
             FileList.SelectedItem.Subscribe(OnFileListSelectedItemChanged);
             SearchResultFileList.SelectedItem.Subscribe(OnFileListSelectedItemChanged);
@@ -110,6 +111,7 @@ namespace RagiFiler.ViewModels.Components
                 name += "*";
             }
 
+            // TODO: キャンセル
             await foreach (var item in IOUtils.LoadFileSystemInfosAsync(dir, name, Ribbon.RecursiveSearch.Value).OfType<FileInfo>())
             {
                 // min はどうでもいい
@@ -125,7 +127,25 @@ namespace RagiFiler.ViewModels.Components
                     continue;
                 }
 
-                SearchResultFileList.AddEntry(new FileListViewItemViewModel(item));
+                var itemVM = new FileListViewItemViewModel(item);
+                if (Ribbon.SearchDuplicateFile.Value)
+                {
+                    itemVM.FileHash = await IOUtils.GetHashString(item).ConfigureAwait(true);
+                    var dups = SearchResultFileList.RawEntries.Where(x => x.FileHash == itemVM.FileHash);
+                    if (dups.Any())
+                    {
+                        itemVM.IsDuplicateFile = true;
+                        foreach (var dup in dups)
+                        {
+                            dup.IsDuplicateFile = true;
+                        }
+                    }
+                    SearchResultFileList.AddEntry(itemVM);
+                }
+                else
+                {
+                    SearchResultFileList.AddEntry(itemVM);
+                }
             }
 
             IsSearchResultVisible.Value = true;
