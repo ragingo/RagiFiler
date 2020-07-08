@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace RagiFiler.Native.Com.Shell
+﻿namespace RagiFiler.Native.Com.Shell
 {
     interface IShellDispatch
     {

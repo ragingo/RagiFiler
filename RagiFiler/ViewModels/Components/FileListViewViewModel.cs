@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows.Data;
+using System.Windows.Threading;
 using RagiFiler.IO;
 using RagiFiler.Models;
 using RagiFiler.Native.Com.Shell;
@@ -12,7 +13,7 @@ using Reactive.Bindings;
 
 namespace RagiFiler.ViewModels.Components
 {
-    class FileListViewViewModel
+    class FileListViewViewModel : IDisposable
     {
         public ReactiveProperty<string> Directory { get; } = new ReactiveProperty<string>();
         public ReactiveProperty<FileListViewItemViewModel> SelectedItem { get; } = new ReactiveProperty<FileListViewItemViewModel>();
@@ -28,8 +29,14 @@ namespace RagiFiler.ViewModels.Components
         public ReactiveCommand<object> ContextMenuItemClick { get; } = new ReactiveCommand<object>();
         public ReactiveCommand<object> ColumnHeaderClick { get; } = new ReactiveCommand<object>();
 
+        private FileSystemWatcher _fileSystemWatcher = new FileSystemWatcher();
+
+        private readonly Dispatcher uiThreadDispatcher;
+
         public FileListViewViewModel()
         {
+            uiThreadDispatcher = Dispatcher.CurrentDispatcher;
+
             RawEntries = new ReadOnlyCollection<FileListViewItemViewModel>(_rawEntries);
             Entries = CollectionViewSource.GetDefaultView(_rawEntries);
 
@@ -39,6 +46,18 @@ namespace RagiFiler.ViewModels.Components
             MouseRightClick.Subscribe(OnMouseRightClick);
             ContextMenuItemClick.Subscribe(OnContextMenuItemClick);
             ColumnHeaderClick.Subscribe(OnColumnHeaderClick);
+
+            _fileSystemWatcher.IncludeSubdirectories = true;
+            _fileSystemWatcher.Changed += OnFileChanged;
+            _fileSystemWatcher.Created += OnFileChanged;
+            _fileSystemWatcher.Deleted += OnFileChanged;
+            _fileSystemWatcher.Renamed += OnFileChanged;
+        }
+
+        // ファイルが変更されたらリフレッシュ
+        private void OnFileChanged(object sender, FileSystemEventArgs e)
+        {
+            uiThreadDispatcher.Invoke(new Action<string>(OnDirectoryChanged), Directory.Value);
         }
 
         public void AddEntry(FileListViewItemViewModel item)
@@ -164,6 +183,8 @@ namespace RagiFiler.ViewModels.Components
                 return;
             }
 
+            _fileSystemWatcher.EnableRaisingEvents = false;
+
             _rawEntries.Clear();
 
             try
@@ -176,6 +197,14 @@ namespace RagiFiler.ViewModels.Components
             catch (UnauthorizedAccessException)
             {
             }
+
+            _fileSystemWatcher.Path = value;
+            _fileSystemWatcher.EnableRaisingEvents = true;
+        }
+
+        public void Dispose()
+        {
+            _fileSystemWatcher.Dispose();
         }
     }
 }

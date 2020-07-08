@@ -26,7 +26,7 @@ namespace RagiFiler.Views.Templates
 
             if (!(item is FileListViewItemViewModel viewModel))
             {
-                return GetDefaultFileTemplate(element);
+                return GetDefaultFileNameTemplate(element);
             }
 
             if (viewModel.Item is FileInfo fileInfo)
@@ -37,23 +37,23 @@ namespace RagiFiler.Views.Templates
                     case ".wmv":
                     case ".mkv":
                     case ".mp4":
-                        return GetVideoFileTemplate(element);
+                        return GetVideoFileNameTemplate(element);
                     default:
-                        return GetDefaultFileTemplate(element);
+                        return GetDefaultFileNameTemplate(element);
                 }
             }
 
-            return GetDefaultFileTemplate(element);
+            return GetDefaultFileNameTemplate(element);
         }
 
-        private DataTemplate GetDefaultFileTemplate(FrameworkElement element)
+        private DataTemplate GetDefaultFileNameTemplate(FrameworkElement element)
         {
-            return element.FindResource("DefaultFileTemplate") as DataTemplate;
+            return element.FindResource("DefaultFileNameTemplate") as DataTemplate;
         }
 
-        private DataTemplate GetVideoFileTemplate(FrameworkElement element)
+        private DataTemplate GetVideoFileNameTemplate(FrameworkElement element)
         {
-            return element.FindResource("VideoFileTemplate") as DataTemplate;
+            return element.FindResource("VideoFileNameTemplate") as DataTemplate;
         }
     }
 }

@@ -13,7 +13,7 @@
 
     <UserControl.Resources>
 
-        <DataTemplate x:Key="DefaultFileTemplate">
+        <DataTemplate x:Key="DefaultFileNameTemplate">
             <StackPanel x:Name="panel" Orientation="Horizontal">
                 <Image x:Name="icon" Source="{Binding Path=Icon}" Width="16" Height="16" Margin="3,0,3,0" />
                 <TextBlock x:Name="name" Text="{Binding Path=Item.Name}" />
@@ -25,7 +25,7 @@
             </DataTemplate.Triggers>
         </DataTemplate>
 
-        <DataTemplate x:Key="VideoFileTemplate">
+        <DataTemplate x:Key="VideoFileNameTemplate">
             <StackPanel x:Name="panel" Orientation="Horizontal" ToolTipService.ShowDuration="{x:Static sys:Int32.MaxValue}">
                 <Image x:Name="icon" Source="{Binding Path=Icon}" Width="16" Height="16" Margin="3,0,3,0" />
                 <TextBlock x:Name="name" Text="{Binding Path=Item.Name}" />
