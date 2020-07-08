@@ -7,7 +7,7 @@ using System.Linq;
 using System.Windows.Data;
 using RagiFiler.IO;
 using RagiFiler.Models;
-using RagiFiler.Native.Com;
+using RagiFiler.Native.Com.Shell;
 using Reactive.Bindings;
 
 namespace RagiFiler.ViewModels.Components

@@ -1,10 +1,10 @@
 ﻿using System;
 
-namespace RagiFiler.Native.Com
+namespace RagiFiler.Native.Com.Shell
 {
     // TODO: .net core 3.1 で dynamic で com object のメンバにアクセスできない・・・修正されたら dynamic に切り替える
     // あれ・・・？ https://github.com/dotnet/corefx/issues/32630
-    class ShellApplication : IDisposable
+    class ShellApplication : IShellDispatch, IDisposable
     {
         private readonly ComObject _instance;
 

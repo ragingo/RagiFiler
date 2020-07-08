@@ -1,8 +1,6 @@
 ﻿using System.IO;
-using System.Threading.Tasks;
 using System.Windows.Media;
 using Prism.Mvvm;
-using RagiFiler.IO;
 using RagiFiler.Media;
 
 namespace RagiFiler.ViewModels.Components

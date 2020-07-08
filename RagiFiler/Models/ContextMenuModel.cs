@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using Prism.Mvvm;
-using RagiFiler.Native.Com;
+using RagiFiler.Native.Com.Shell;
 
 namespace RagiFiler.Models
 {
