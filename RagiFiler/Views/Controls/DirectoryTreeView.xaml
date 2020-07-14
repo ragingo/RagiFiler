@@ -42,11 +42,8 @@
             <TreeView.ItemContainerStyle>
                 <Style BasedOn="{StaticResource TreeViewItemStyle}" TargetType="TreeViewItem">
                     <Setter Property="IsSelected" Value="{Binding Path=IsSelected.Value, Mode=TwoWay}" />
-                    <Setter Property="IsExpanded" Value="{Binding Path=IsExpanded.Value, Mode=OneWayToSource}" />
+                    <Setter Property="IsExpanded" Value="{Binding Path=IsExpanded.Value, Mode=TwoWay}" />
                     <Style.Triggers>
-                        <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="IsExpanded" Value="True" />
-                        </Trigger>
                         <MultiDataTrigger>
                             <MultiDataTrigger.Conditions>
                                 <Condition Binding="{Binding Path=IsHiddenFile}" Value="True" />
@@ -70,7 +67,7 @@
             </TreeView.ItemContainerStyle>
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectedItemChanged">
-                    <prism:InvokeCommandAction Command="{Binding Path=DataContext.SelectedItemChanged, RelativeSource={RelativeSource AncestorType=TreeView, Mode=FindAncestor}}" TriggerParameterPath="NewValue" />
+                    <prism:InvokeCommandAction Command="{Binding Path=DataContext.ChangeSelectedItem, RelativeSource={RelativeSource AncestorType=TreeView, Mode=FindAncestor}}" TriggerParameterPath="NewValue" />
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </TreeView>

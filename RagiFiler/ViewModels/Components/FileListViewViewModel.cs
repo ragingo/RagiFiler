@@ -13,7 +13,7 @@ using Reactive.Bindings;
 
 namespace RagiFiler.ViewModels.Components
 {
-    class FileListViewViewModel : IDisposable
+    class FileListViewViewModel
     {
         public ReactiveProperty<string> Directory { get; } = new ReactiveProperty<string>();
         public ReactiveProperty<FileListViewItemViewModel> SelectedItem { get; } = new ReactiveProperty<FileListViewItemViewModel>();
@@ -23,41 +23,23 @@ namespace RagiFiler.ViewModels.Components
         public ICollectionView Entries { get; private set; }
         public ObservableCollection<FolderItemVerb> ContextMenuItems { get; } = new ObservableCollection<FolderItemVerb>();
 
-        public ReactiveCommand<object> SelectionChangedCommand { get; } = new ReactiveCommand<object>();
+        public ReactiveCommand<object> ChangeSelection { get; } = new ReactiveCommand<object>();
         public ReactiveCommand<object> MouseDoubleClick { get; } = new ReactiveCommand<object>();
         public ReactiveCommand<object> MouseRightClick { get; } = new ReactiveCommand<object>();
         public ReactiveCommand<object> ContextMenuItemClick { get; } = new ReactiveCommand<object>();
         public ReactiveCommand<object> ColumnHeaderClick { get; } = new ReactiveCommand<object>();
 
-        private FileSystemWatcher _fileSystemWatcher = new FileSystemWatcher();
-
-        private readonly Dispatcher uiThreadDispatcher;
-
         public FileListViewViewModel()
         {
-            uiThreadDispatcher = Dispatcher.CurrentDispatcher;
-
             RawEntries = new ReadOnlyCollection<FileListViewItemViewModel>(_rawEntries);
             Entries = CollectionViewSource.GetDefaultView(_rawEntries);
 
             Directory.Subscribe(OnDirectoryChanged);
-            SelectionChangedCommand.Subscribe(OnSelectionChanged);
+            ChangeSelection.Subscribe(OnSelectionChanged);
             MouseDoubleClick.Subscribe(OnMouseDoubleClick);
             MouseRightClick.Subscribe(OnMouseRightClick);
             ContextMenuItemClick.Subscribe(OnContextMenuItemClick);
             ColumnHeaderClick.Subscribe(OnColumnHeaderClick);
-
-            _fileSystemWatcher.IncludeSubdirectories = true;
-            _fileSystemWatcher.Changed += OnFileChanged;
-            _fileSystemWatcher.Created += OnFileChanged;
-            _fileSystemWatcher.Deleted += OnFileChanged;
-            _fileSystemWatcher.Renamed += OnFileChanged;
-        }
-
-        // ファイルが変更されたらリフレッシュ
-        private void OnFileChanged(object sender, FileSystemEventArgs e)
-        {
-            uiThreadDispatcher.Invoke(new Action<string>(OnDirectoryChanged), Directory.Value);
         }
 
         public void AddEntry(FileListViewItemViewModel item)
@@ -172,6 +154,8 @@ namespace RagiFiler.ViewModels.Components
 
         private async void OnDirectoryChanged(string value)
         {
+            _rawEntries.Clear();
+
             if (value == null)
             {
                 return;
@@ -183,10 +167,6 @@ namespace RagiFiler.ViewModels.Components
                 return;
             }
 
-            _fileSystemWatcher.EnableRaisingEvents = false;
-
-            _rawEntries.Clear();
-
             try
             {
                 await foreach (var entry in IOUtils.LoadFileSystemInfosAsync(value))
@@ -197,14 +177,6 @@ namespace RagiFiler.ViewModels.Components
             catch (UnauthorizedAccessException)
             {
             }
-
-            _fileSystemWatcher.Path = value;
-            _fileSystemWatcher.EnableRaisingEvents = true;
-        }
-
-        public void Dispose()
-        {
-            _fileSystemWatcher.Dispose();
         }
     }
 }

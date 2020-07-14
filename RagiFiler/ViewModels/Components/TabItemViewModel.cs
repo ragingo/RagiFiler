@@ -59,6 +59,7 @@ namespace RagiFiler.ViewModels.Components
         {
             if (!(value is DirectoryTreeViewItemViewModel item))
             {
+                FileList.Directory.Value = null;
                 return;
             }
 
@@ -79,9 +80,9 @@ namespace RagiFiler.ViewModels.Components
                 return;
             }
 
-            if (DirectoryTree.SelectedItemChanged.CanExecute())
+            if (DirectoryTree.ChangeSelectedItem.CanExecute())
             {
-                DirectoryTree.SelectedItemChanged.Execute(item);
+                DirectoryTree.ChangeSelectedItem.Execute(item);
             }
         }
 

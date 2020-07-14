@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ using Prism.Mvvm;
 using RagiFiler.IO;
 using RagiFiler.Media;
 using Reactive.Bindings;
+using Reactive.Bindings.Extensions;
 
 namespace RagiFiler.ViewModels.Components
 {
@@ -22,6 +24,7 @@ namespace RagiFiler.ViewModels.Components
         public ReactiveProperty<bool> IsSelected { get; } = new ReactiveProperty<bool>();
         public ReactiveProperty<bool> IsExpanded { get; } = new ReactiveProperty<bool>();
         public ReactiveCommand<bool> SelectionChanged { get; } = new ReactiveCommand<bool>();
+        public ReactiveCommand<string> Renamed { get; } = new ReactiveCommand<string>();
 
         private ImageSource _icon;
         public ImageSource Icon
@@ -58,9 +61,29 @@ namespace RagiFiler.ViewModels.Components
         {
         }
 
-        public DirectoryTreeViewItemViewModel(FileSystemInfo info)
+        public DirectoryTreeViewItemViewModel(string path, WeakReference<DirectoryTreeViewItemViewModel> parent) : this(new DirectoryInfo(path), parent)
+        {
+        }
+
+        public DirectoryTreeViewItemViewModel(FileSystemInfo info): this(info, null)
         {
             Item = info;
+            IsSelected.Subscribe(OnSelected);
+            Renamed.Subscribe(OnRenamed);
+        }
+
+        public DirectoryTreeViewItemViewModel(FileSystemInfo info, WeakReference<DirectoryTreeViewItemViewModel> parent)
+        {
+            Item = info;
+            IsSelected.Subscribe(OnSelected);
+            Renamed.Subscribe(OnRenamed);
+            Parent = parent;
+        }
+
+        private void OnRenamed(string value)
+        {
+            Item = new DirectoryInfo(value);
+            RaisePropertyChanged(nameof(Item));
             IsSelected.Subscribe(OnSelected);
         }
 
@@ -68,15 +91,10 @@ namespace RagiFiler.ViewModels.Components
         {
             if (value)
             {
-                //DirectoryTreeViewItemViewModel treeViewItem;
-                //if (Parent.TryGetTarget(out treeViewItem))
-                //{
-                //    treeViewItem.IsExpanded.Value = true;
-                //}
                 await LoadSubDirectories().ConfigureAwait(false);
             }
 
-            //IsExpanded.Value = value;
+            IsExpanded.Value = value;
 
             SelectionChanged.Execute(value);
         }
@@ -90,7 +108,7 @@ namespace RagiFiler.ViewModels.Components
 
             await foreach (var info in IOUtils.LoadFileSystemInfosAsync(Item.FullName).OfType<DirectoryInfo>())
             {
-                var item = new DirectoryTreeViewItemViewModel(info) { Parent = new WeakReference<DirectoryTreeViewItemViewModel>(this) };
+                var item = new DirectoryTreeViewItemViewModel(info, new WeakReference<DirectoryTreeViewItemViewModel>(this));
                 Children.Add(item);
             }
         }

@@ -34,16 +34,16 @@ namespace RagiFiler.Views.Controls
                     return;
                 }
 
-                if (vm.SelectionChangedCommand.CanExecute())
+                if (vm.ChangeSelection.CanExecute())
                 {
-                    vm.SelectionChangedCommand.Execute(itemVM);
+                    vm.ChangeSelection.Execute(itemVM);
                 }
             }
             else if (e.RemovedItems.Count > 0)
             {
-                if (vm.SelectionChangedCommand.CanExecute())
+                if (vm.ChangeSelection.CanExecute())
                 {
-                    vm.SelectionChangedCommand.Execute(null);
+                    vm.ChangeSelection.Execute(null);
                 }
             }
         }
