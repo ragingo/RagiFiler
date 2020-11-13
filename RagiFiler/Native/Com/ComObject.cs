@@ -95,7 +95,7 @@ namespace RagiFiler.Native.Com
         }
 
         #region IDisposable Support
-        private bool disposedValue = false; // 重複する呼び出しを検出するには
+        private bool disposedValue;
 
         protected virtual void Dispose(bool disposing)
         {

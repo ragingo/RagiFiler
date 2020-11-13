@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System;
 
 namespace RagiFiler.IO
 {
@@ -55,7 +56,7 @@ namespace RagiFiler.IO
             using (var fs = file.OpenRead())
             using (var md5 = MD5.Create())
             {
-                int len = await fs.ReadAsync(buf, 0, buf.Length).ConfigureAwait(false);
+                int len = await fs.ReadAsync(buf).ConfigureAwait(false);
                 byte[] bytes = md5.ComputeHash(buf, 0, len);
                 var sb = new StringBuilder(len * 2);
                 for (int i = 0; i < bytes.Length; i++)
